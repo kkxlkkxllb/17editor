@@ -1,0 +1,68 @@
+include ../_helper
+input(type="hidden" name="_id" value= _id)
+.form-group
+	label 标题
+	input.form-control(value= title type="text" name="title" placeholder= "输入课程标题" required="required")
+.form-group
+	.btn-toolbar(data-role="editor-toolbar" data-target="#editor_" + editor_id)
+		input.hidden_uploader(type="file" data-target="pictureBtn_" + editor_id data-edit="insertImage")
+		.btn-group
+			a.btn.btn-default.dropdown-toggle(data-toggle="dropdown" title="Font Size")
+				i.fa.fa-text-height
+				| &nbsp;
+				b.caret
+			ul.font-size-list.dropdown-menu
+				+fontSize_list()
+		.btn-group
+			//- a.btn.btn-default(data-edit="FormatBlock h1" title="Format H1")
+			//- 	| H1
+			a.btn.btn-default(data-edit="bold" title="Bold (Ctrl/Cmd+B)")
+				i.fa.fa-bold
+			a.btn.btn-default(data-edit="italic" title="Italic (Ctrl/Cmd+I)" )
+				i.fa.fa-italic
+			a.btn.btn-default(data-edit="strikethrough" title="Strikethrough")
+				i.fa.fa-strikethrough
+			a.btn.btn-default(data-edit="underline" title="Underline (Ctrl/Cmd+U)" )
+				i.fa.fa-underline
+			a.btn.btn-default(data-edit= "SuperScript" title="Superscript")
+				i.fa.fa-superscript
+			a.btn.btn-default(data-edit= "SubScript" title="Subscript")
+				i.fa.fa-subscript
+			a.btn.btn-default(data-edit= "RemoveFormat" title="Clean")
+				i.fa.fa-eraser
+		.btn-group
+			a.btn.btn-default(data-edit="insertunorderedlist" title="Bullet list")
+				i.fa.fa-list-ul
+			a.btn.btn-default(data-edit="insertorderedlist" title="Number list" )
+				i.fa.fa-list-ol
+			a.btn.btn-default(data-edit="outdent" title="Reduce indent (Shift+Tab)")
+				i.fa.fa-outdent
+			a.btn.btn-default(data-edit="indent" title="Indent (Tab)")
+				i.fa.fa-indent
+		.btn-group
+			a.btn.btn-default(data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)")
+				i.fa.fa-align-left
+			a.btn.btn-default(data-edit="justifycenter" title="Center (Ctrl/Cmd+E)")
+				i.fa.fa-align-center
+			a.btn.btn-default(data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)")
+				i.fa.fa-align-right
+			a.btn.btn-default(data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)")
+				i.fa.fa-align-justify
+		.btn-group
+			a.btn.btn-default(data-edit="undo" title="Undo (Ctrl/Cmd+Z)")
+				i.fa.fa-undo
+			a.btn.btn-default(data-edit="redo" title="Redo (Ctrl/Cmd+Y)")
+				i.fa.fa-repeat
+		.btn-group
+			a.picBtn.btn.btn-default(title="Insert picture" id="pictureBtn_" + editor_id)
+				i.fa.fa-picture-o
+.picture_control.form-group
+	label
+		| 图片缩放比例：
+		span.num 1.0
+	input.scale-img.form-control(type="range" min="0.1" max="1.0" value="1.0" step="0.1")
+.form-group
+	label 正文
+	.editor.form-control(id = "editor_" + editor_id)
+		!= raw_content
+

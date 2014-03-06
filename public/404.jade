@@ -1,0 +1,40 @@
+include ./mixins/header_helper
+
+doctype html
+html(lang="en")
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1")
+		+meta_tag("viewport","width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no")
+		+meta_tag("apple-mobile-web-app-capable","yes")
+		+meta_tag("apple-mobile-web-app-status-bar-style","black-translucent")
+		+meta_tag("description",description)
+		+meta_tag("keywords",keywords)
+
+		//if lt IE 9
+			script(src= "http://imagine.17up.org/assets/html5.js")
+
+		title 404 Page Not Found
+		+stylesheet_link_tag("./assets/error.css")
+		+javascript_include_tag("http://code.jquery.com/jquery-2.1.0.min.js")
+		+javascript_include_tag("./assets/error.js")
+		link(href="./favicon.ico" rel="shortcut icon")
+
+	body
+		#main
+			h2.status.text_center 404
+			p.text_center
+				| 天呐，你访问到了一个不该访问的地方
+			p.text_center
+				| 我劝你在后悔之前赶紧
+				a(href= "/") 回主页
+				| 吧，不要惊醒它哦。
+			#wrapper.sleep
+				#monster
+					.eye
+						.lid
+					.eye
+						.lid
+					#mouth
+				audio#audio-ohh(preload = "preload" src="./assets/audios/ohh.mp3")
+				audio#audio-snap(preload = "preload" src="./assets/audios/snap.mp3")
