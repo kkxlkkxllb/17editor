@@ -3,8 +3,13 @@ html(lang="en")
 	head
 		include _includes/header
 	body
-		header.navbar.navbar-fixed-top.inav
+		header.navbar.navbar-fixed-top.inav.navbar-default
 			.container
-				.brand.dancer 17Editor
+				span.doc-list-menu
+					i.fa.fa-inbox
+				.brand.franklin 17Editor
+		aside#doc-list
+			.container
 		article
+			include _includes/editor
 		#flash_message

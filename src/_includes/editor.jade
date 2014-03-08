@@ -1,11 +1,14 @@
-include ../_helper
-input(type="hidden" name="_id" value= _id)
-.form-group
-	label 标题
-	input.form-control(value= title type="text" name="title" placeholder= "输入课程标题" required="required")
-.form-group
-	.btn-toolbar(data-role="editor-toolbar" data-target="#editor_" + editor_id)
-		input.hidden_uploader(type="file" data-target="pictureBtn_" + editor_id data-edit="insertImage")
+include ../mixins/editor_helper
+form(role="form" method="post")
+	input(type="hidden" name="id")
+	.action.form-group
+		input.btn.btn-primary(type="submit" value="保存")
+		span.new-doc.btn.btn-default 新建
+	.form-group
+		label 标题
+		input.form-control(type="text" name="title" placeholder= "输入课程标题" required="required")
+	.btn-toolbar.form-group(data-role="editor-toolbar" data-target="#editor")
+		input.hidden_uploader(type="file" data-target="pictureBtn" data-edit="insertImage" tabindex=-1)
 		.btn-group
 			a.btn.btn-default.dropdown-toggle(data-toggle="dropdown" title="Font Size")
 				i.fa.fa-text-height
@@ -54,15 +57,14 @@ input(type="hidden" name="_id" value= _id)
 			a.btn.btn-default(data-edit="redo" title="Redo (Ctrl/Cmd+Y)")
 				i.fa.fa-repeat
 		.btn-group
-			a.picBtn.btn.btn-default(title="Insert picture" id="pictureBtn_" + editor_id)
+			a#pictureBtn.btn.btn-default(title="Insert picture")
 				i.fa.fa-picture-o
-.picture_control.form-group
-	label
-		| 图片缩放比例：
-		span.num 1.0
-	input.scale-img.form-control(type="range" min="0.1" max="1.0" value="1.0" step="0.1")
-.form-group
-	label 正文
-	.editor.form-control(id = "editor_" + editor_id)
-		!= raw_content
-
+	.picture_control.form-group
+		label
+			| 图片缩放比例：
+			span.num 1.00
+		input.scale-img.form-control(type="range" min="0.1" max="1.0" value="1.0" step="0.05" tabindex=-1)
+	.form-group
+		label 正文
+		textarea.hide(name= "raw_content")
+		#editor.form-control

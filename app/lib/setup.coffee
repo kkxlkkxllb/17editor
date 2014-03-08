@@ -11,6 +11,7 @@ require('spine/lib/route')
 require("lib/bootstrap.min")
 
 require("lib/jquery/animo")
+require("lib/jquery/jquery-dateFormat")
 require("lib/jquery/jquery.serializeObject")
 require("lib/jquery/jquery.hotkeys")
 require("lib/jquery/bootstrap-wysiwyg")

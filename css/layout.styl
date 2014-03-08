@@ -30,56 +30,30 @@ input[type='range']
 	left 0
 	overflow hidden
 .inav
-	text-shadow-white(nav_color)
 	.container
 		position relative
-		.nav
-			li
-				a
-					color #eee
-					background transparent
-					font-size 1.2em
-					&:hover
-						color white
-					span.desc
-						margin-left 8px
-
-			li.active
-				a
-					color white
-				@media (min-width: 768px)
-					a
-						background #00864e
-				@media (max-width: 767px)
-					a
-						border-left 3px solid #f5f5f5
-			.dropdown-menu
-				min-width 0
-				border-top none
-				text-shadow-white(nav_color)
-
-		#member
-			padding 5px
-			img
-				width 40px
-				height 40px
-				padding 3px
-				background #f5f5f5
+		.doc-list-menu
+			position absolute
+			top 0
+			line-height 50px
+			font-size 2em
+			cursor pointer
+			padding 0 10px
+			border-left 1px solid transparent
+			border-right 1px solid transparent
+		.doc-list-menu.active,.doc-list-menu:hover
+			background #fff
+			border-color #e7e7e7
 		.brand
 			top 0
 			font-size 2.2em
 			position absolute
-			// text-shine()
+			line-height 50px
 			left 50%
-			margin-left -1em
+			margin-left -50px
 		.brand.loading
-			text-shine()
 			-webkit-animation breath 1.5s infinite ease-in-out
-.stack > *:not(.active)
-	display none
-.navbar-toggle
-	font-size 1.5em
-	text-shadow-inset()
+
 article
 	margin-top nav_height
 	position relative

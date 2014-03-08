@@ -1,18 +1,16 @@
 Notify = require("lib/utils/notify")
-Doc = require("models/doc")
 class BaseEditor extends Spine.Controller
 	@include Notify
 	events:
 		"submit form": "onSubmit"
-		"click .picBtn": "uploadPic"
+		"click #pictureBtn": "uploadPic"
 		"change .scale-img": "scaleImg"
-		"click .editor img": "selectImg"
-		"dragstart .editor img": "handleDragStart"
-		"dragend .editor img": "handleDragEnd"
-		"blur .editor": "handleBlur"
-	setup: ->
-		$('a[title]').tooltip(container: 'body')
-		@$editor = $('#editor_' + @editor_id)
+		"click #editor img": "selectImg"
+		"dragstart #editor img": "handleDragStart"
+		"dragend #editor img": "handleDragEnd"
+		"blur #editor": "handleBlur"
+		"focus #editor": "handleFocus"
+	initEditor: (@$editor) ->
 		@$editor.wysiwyg
 			fileUploadError: (reason, detail) =>
 				@flash reason + detail
@@ -32,17 +30,23 @@ class BaseEditor extends Spine.Controller
 	scaleImg: (e) ->
 		$target = $(e.currentTarget)
 		rate = $target.val()
-		$target.prev().find(".num").text rate
+		$target.prev().find(".num").text parseFloat(rate).toFixed(2)
 		$img = $("img.active",@$editor)
 		if !$img.length
 			$img = $("img:eq(0)",@$editor)
 		unless !$img.length
 			$img.width $img[0].naturalWidth * rate
 	handleBlur: (e) ->
-		$imgs = $(e.currentTarget).find("img")
+		$imgs = @handleFocus(e)
 		$imgs.removeClass "active"
-		if $imgs.length is 0
+		@$editor.prev().val @$editor.cleanHtml()
+	handleFocus: (e) ->
+		$imgs = $(e.currentTarget).find("img")
+		if $imgs.length > 0
+			$(".picture_control",@$el).show()
+		else
 			$(".picture_control",@$el).hide()
+		$imgs
 	handleDragStart: (e) ->
 		position = $(e.currentTarget).addClass("dragging").position()
 		event = e.originalEvent
@@ -61,20 +65,22 @@ class BaseEditor extends Spine.Controller
 		$("img.dragging",@$editor).css
 			"left": (event.clientX + parseInt(offset[0],10)) + "px"
 			"top": (event.clientY + parseInt(offset[1],10)) + "px"
-	onSubmit: (e) ->
-		e.preventDefault()
-		$form = $(e.currentTarget)
+	getFormData: ->
 		html = @$editor.cleanHtml()
 		if html is ""
 			@flash "正文内容不允许为空","danger"
 			@$editor.focus()
 			return false
-		else
-			formObj = $form.serializeObject()
-			data = $.extend {},formObj,raw_content: html
-			$(".brand").addClass "loading"
-			Doc.create data, done: ->
-				$(".brand").removeClass "loading"
-				Spine.Route.navigate("/doc/" + Doc.last()._id,true)
+		$(".brand").addClass "loading"
+		@$editor.closest("form").serializeObject()
+
+	resetDoc: ->
+		@$editor.empty().focus()
+	renderWithData: (data) ->
+		$form = @$editor.closest("form")
+		$.each $("input[name],textarea[name]",$form), (i,e) ->
+			key = $(e).attr "name"
+			$(e).val data[key]
+		@$editor.html(data.raw_content).focus()
 
 module.exports = BaseEditor

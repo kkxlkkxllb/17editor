@@ -15,12 +15,51 @@
     <link href="./favicon.png" rel="apple-touch-icon-precomposed">
   </head>
   <body>
-    <header class="navbar navbar-fixed-top inav">
-      <div class="container">
-        <div class="brand dancer">17Editor</div>
+    <header class="navbar navbar-fixed-top inav navbar-default">
+      <div class="container"><span class="doc-list-menu"><i class="fa fa-inbox"></i></span>
+        <div class="brand franklin">17Editor</div>
       </div>
     </header>
-    <article></article>
+    <aside id="doc-list">
+      <div class="container"></div>
+    </aside>
+    <article>
+      <form role="form" method="post">
+        <input type="hidden" name="id">
+        <div class="action form-group">
+          <input type="submit" value="保存" class="btn btn-primary"><span class="new-doc btn btn-default">新建</span>
+        </div>
+        <div class="form-group">
+          <label>标题</label>
+          <input type="text" name="title" placeholder="输入课程标题" required="required" class="form-control">
+        </div>
+        <div data-role="editor-toolbar" data-target="#editor" class="btn-toolbar form-group">
+          <input type="file" data-target="pictureBtn" data-edit="insertImage" tabindex="-1" class="hidden_uploader">
+          <div class="btn-group"><a data-toggle="dropdown" title="Font Size" class="btn btn-default dropdown-toggle"><i class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
+            <ul class="font-size-list dropdown-menu">
+                    <li><a data-edit="fontSize 1" href="javascript:void(0)"><font size="1">Small</font></a></li>
+                    <li><a data-edit="fontSize 3" href="javascript:void(0)"><font size="3">Normal</font></a></li>
+                    <li><a data-edit="fontSize 5" href="javascript:void(0)"><font size="5">Huge</font></a></li>
+            </ul>
+          </div>
+          <div class="btn-group"><a data-edit="bold" title="Bold (Ctrl/Cmd+B)" class="btn btn-default"><i class="fa fa-bold"></i></a><a data-edit="italic" title="Italic (Ctrl/Cmd+I)" class="btn btn-default"><i class="fa fa-italic"></i></a><a data-edit="strikethrough" title="Strikethrough" class="btn btn-default"><i class="fa fa-strikethrough"></i></a><a data-edit="underline" title="Underline (Ctrl/Cmd+U)" class="btn btn-default"><i class="fa fa-underline"></i></a><a data-edit="SuperScript" title="Superscript" class="btn btn-default"><i class="fa fa-superscript"></i></a><a data-edit="SubScript" title="Subscript" class="btn btn-default"><i class="fa fa-subscript"></i></a><a data-edit="RemoveFormat" title="Clean" class="btn btn-default"><i class="fa fa-eraser"></i></a>
+          </div>
+          <div class="btn-group"><a data-edit="insertunorderedlist" title="Bullet list" class="btn btn-default"><i class="fa fa-list-ul"></i></a><a data-edit="insertorderedlist" title="Number list" class="btn btn-default"><i class="fa fa-list-ol"></i></a><a data-edit="outdent" title="Reduce indent (Shift+Tab)" class="btn btn-default"><i class="fa fa-outdent"></i></a><a data-edit="indent" title="Indent (Tab)" class="btn btn-default"><i class="fa fa-indent"></i></a></div>
+          <div class="btn-group"><a data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)" class="btn btn-default"><i class="fa fa-align-left"></i></a><a data-edit="justifycenter" title="Center (Ctrl/Cmd+E)" class="btn btn-default"><i class="fa fa-align-center"></i></a><a data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)" class="btn btn-default"><i class="fa fa-align-right"></i></a><a data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)" class="btn btn-default"><i class="fa fa-align-justify"></i></a></div>
+          <div class="btn-group"><a data-edit="undo" title="Undo (Ctrl/Cmd+Z)" class="btn btn-default"><i class="fa fa-undo"></i></a><a data-edit="redo" title="Redo (Ctrl/Cmd+Y)" class="btn btn-default"><i class="fa fa-repeat"></i></a></div>
+          <div class="btn-group"><a id="pictureBtn" title="Insert picture" class="btn btn-default"><i class="fa fa-picture-o"></i></a></div>
+        </div>
+        <div class="picture_control form-group">
+          <label>图片缩放比例：<span class="num">1.00</span></label>
+          <input type="range" min="0.1" max="1.0" value="1.0" step="0.05" tabindex="-1" class="scale-img form-control">
+        </div>
+        <div class="form-group">
+          <label>正文</label>
+          <textarea name="raw_content" class="hide"></textarea>
+          <div id="editor" class="form-control"></div>
+        </div>
+      </form>
+    </article>
     <div id="flash_message"></div>
   </body>
 </html>
