@@ -10,15 +10,12 @@ require('spine/lib/route')
 
 require("lib/bootstrap.min")
 
-require("lib/jquery/animo")
 require("lib/jquery/jquery-dateFormat")
 require("lib/jquery/jquery.serializeObject")
 require("lib/jquery/jquery.hotkeys")
 require("lib/jquery/bootstrap-wysiwyg")
 
-require("lib/uploader/jquery.ui.widget")
-require("lib/uploader/jquery.iframe-transport")
-require("lib/uploader/jquery.fileupload")
+require("lib/utils/drawingboard")
 
 require("lib/sound/speech")
 

@@ -4,14 +4,9 @@ Notify =
 		$container.prepend require('views/widgets/flash')(msg: msg)
 		$alert = $(".alert:eq(0)",$container)
 		$alert.addClass "alert-#{type}"
-		$alert.animo
-			animation: "fadeIn"
+		$alert.show()
 		fuc = ->
-			$alert.animo
-				animation: "fadeOut"
-				keep: true
-				->
-					$alert.remove()
+			$alert.remove()
 		setTimeout fuc,10000
 		false
 

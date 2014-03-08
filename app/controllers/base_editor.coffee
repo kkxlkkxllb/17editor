@@ -1,4 +1,14 @@
 Notify = require("lib/utils/notify")
+
+DrawingBoard.Control.CopyToEditor = DrawingBoard.Control.extend
+	name: "copy"
+	initialize: ->
+		@$el.append require("views/widgets/icon_copy")()
+		handler = (e) =>
+			@board.getImg()
+			e.preventDefault()
+		@$el.on "click", ".drawing-board-control-copy-button",handler
+
 class BaseEditor extends Spine.Controller
 	@include Notify
 	events:
@@ -19,6 +29,22 @@ class BaseEditor extends Spine.Controller
 				$(".picture_control",@$el).show()
 		@$editor.on "drop", @handleDrop
 		@$editor.on "dragover", @handleDragOver
+	initDrawBoard: (id) ->
+		options =
+			controls: [
+				'Color'
+				'Size'
+				DrawingMode:
+					filler: false
+				'Navigation'
+				'Download'
+				'CopyToEditor'
+			]
+			size: 2
+			droppable: true
+			webStorage: false
+		@draw_board = new DrawingBoard.Board(id,options)
+
 	uploadPic: (e) ->
 		target_id = $(e.currentTarget).attr "id"
 		$("input[data-target='#{target_id}']").trigger "click"
@@ -73,9 +99,9 @@ class BaseEditor extends Spine.Controller
 			return false
 		$(".brand").addClass "loading"
 		@$editor.closest("form").serializeObject()
-
 	resetDoc: ->
 		@$editor.empty().focus()
+		@draw_board.reset(background: true)
 	renderWithData: (data) ->
 		$form = @$editor.closest("form")
 		$.each $("input[name],textarea[name]",$form), (i,e) ->

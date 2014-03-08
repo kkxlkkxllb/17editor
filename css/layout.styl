@@ -32,16 +32,23 @@ input[type='range']
 .inav
 	.container
 		position relative
-		.doc-list-menu
-			position absolute
-			top 0
-			line-height 50px
-			font-size 2em
+		.menu-btn
 			cursor pointer
 			padding 0 10px
 			border-left 1px solid transparent
 			border-right 1px solid transparent
-		.doc-list-menu.active,.doc-list-menu:hover
+			font-size 2em
+			line-height 50px
+			display inline-block
+		.doc-list-menu
+			position absolute
+			top 0
+		.action-menu
+			position absolute
+			top 0
+			right 0
+
+		.menu-btn.active,.menu-btn:hover
 			background #fff
 			border-color #e7e7e7
 		.brand

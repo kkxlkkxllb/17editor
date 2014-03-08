@@ -1,9 +1,6 @@
 include ../mixins/editor_helper
 form(role="form" method="post")
 	input(type="hidden" name="id")
-	.action.form-group
-		input.btn.btn-primary(type="submit" value="保存")
-		span.new-doc.btn.btn-default 新建
 	.form-group
 		label 标题
 		input.form-control(type="text" name="title" placeholder= "输入课程标题" required="required")
@@ -59,6 +56,9 @@ form(role="form" method="post")
 		.btn-group
 			a#pictureBtn.btn.btn-default(title="Insert picture")
 				i.fa.fa-picture-o
+	.form-group
+		label 绘画板
+		#drawing-panel
 	.picture_control.form-group
 		label
 			| 图片缩放比例：
