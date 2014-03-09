@@ -12,7 +12,7 @@ class App extends BaseEditor
 		super
 		Doc.bind "edit", @handleEdit
 		@initEditor($('#editor'))
-		$('a[title]').tooltip(container:'body')
+		$('a[title]').tooltip(container: '.btn-toolbar')
 	onSubmit: (e) ->
 		e.preventDefault()
 		self = this

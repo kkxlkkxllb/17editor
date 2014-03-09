@@ -15,7 +15,6 @@ require("lib/jquery/jquery.serializeObject")
 require("lib/jquery/jquery.hotkeys")
 require("lib/jquery/bootstrap-wysiwyg")
 
-require("lib/utils/mathquill.min")
 require("lib/utils/drawingboard")
 require("lib/utils/drawingboard_extend")
 

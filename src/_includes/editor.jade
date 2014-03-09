@@ -58,8 +58,13 @@ form(role="form" method="post")
 				i.fa.fa-picture-o
 			a.toggle-drawing.btn.btn-default(title="绘画板")
 				i.fa.fa-pencil-square-o
+			a.insert-mathml.btn.btn-default(title="公式编写")
+				i.fa.fa-magic
 	.form-group.drawing-wrapper
 		#drawing-panel.hide
+	.form-group.mathml-wrapper.hide
+		label 公式编辑
+		.mathml-box
 	.picture_control.form-group
 		label
 			| 图片缩放比例：

@@ -11,6 +11,7 @@ class BaseEditor extends Spine.Controller
 		"blur #editor": "handleBlur"
 		"focus #editor": "handleFocus"
 		"click .toggle-drawing": "toggleDrawing"
+		"click .insert-mathml": "insertMath"
 	initEditor: (@$editor) ->
 		@$editor.wysiwyg
 			fileUploadError: (reason, detail) =>
@@ -24,6 +25,7 @@ class BaseEditor extends Spine.Controller
 		@$editor.keydown "ctrl+s meta+s", (e) ->
 			e.preventDefault()
 			e.stopPropagation()
+			$(@).prev().val $(@).cleanHtml()
 			$(@).closest("form").submit()
 	initDrawBoard: (id) ->
 		options =
@@ -45,6 +47,7 @@ class BaseEditor extends Spine.Controller
 		$(e.currentTarget).toggleClass "active"
 		unless @draw_board
 			@initDrawBoard("drawing-panel")
+			$('a[title]').tooltip(container: '#drawing-panel')
 	uploadPic: (e) ->
 		target_id = $(e.currentTarget).attr "id"
 		$("input[data-target='#{target_id}']").trigger "click"
@@ -77,6 +80,7 @@ class BaseEditor extends Spine.Controller
 	handleDragStart: (e) ->
 		position = $(e.currentTarget).addClass("dragging").position()
 		event = e.originalEvent
+		event.dataTransfer.effectAllowed = 'linkMove'
 		text = (position.left - event.clientX) + "," + (position.top - event.clientY)
 		event.dataTransfer.setData "text/plain",text
 	handleDragOver: (e) ->
@@ -109,6 +113,8 @@ class BaseEditor extends Spine.Controller
 			key = $(e).attr "name"
 			$(e).val data[key]
 		@$editor.html(data.raw_content).focus()
-
+	insertMath: (e) ->
+		$(e.currentTarget).toggleClass "active"
+		$(".mathml-wrapper",@$el).toggleClass "hide"
 
 module.exports = BaseEditor
