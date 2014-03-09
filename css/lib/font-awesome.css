@@ -1368,4 +1368,6 @@
 .fa-weixin-round:before {
 	content: "\e000";
 }
-
+.fa-filler:before {
+  content: "\f043";
+}

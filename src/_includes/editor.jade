@@ -54,11 +54,12 @@ form(role="form" method="post")
 			a.btn.btn-default(data-edit="redo" title="Redo (Ctrl/Cmd+Y)")
 				i.fa.fa-repeat
 		.btn-group
-			a#pictureBtn.btn.btn-default(title="Insert picture")
+			a#pictureBtn.upload-picture.btn.btn-default(title="Insert picture")
 				i.fa.fa-picture-o
-	.form-group
-		label 绘画板
-		#drawing-panel
+			a.toggle-drawing.btn.btn-default(title="绘画板")
+				i.fa.fa-pencil-square-o
+	.form-group.drawing-wrapper
+		#drawing-panel.hide
 	.picture_control.form-group
 		label
 			| 图片缩放比例：

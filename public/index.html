@@ -16,9 +16,10 @@
   </head>
   <body>
     <header class="navbar navbar-fixed-top inav navbar-default">
-      <div class="container"><span class="doc-list-menu menu-btn"><i class="fa fa-inbox"></i></span>
+      <div class="container">
+        <div class="action-menu-left"><span class="doc-list-menu menu-btn"><i class="fa fa-inbox"></i></span></div>
         <div class="brand franklin">17Editor</div>
-        <div class="action-menu"><span title="保存" class="menu-btn save-doc"><i class="fa fa-cloud-upload"></i></span><span title="新建" class="menu-btn new-doc"><i class="fa fa-edit"></i></span></div>
+        <div class="action-menu-right"><span title="保存" class="menu-btn save-doc"><i class="fa fa-cloud-upload"></i></span><span title="新建" class="menu-btn new-doc"><i class="fa fa-file-o"></i></span></div>
       </div>
     </header>
     <aside id="doc-list">
@@ -45,11 +46,10 @@
           <div class="btn-group"><a data-edit="insertunorderedlist" title="Bullet list" class="btn btn-default"><i class="fa fa-list-ul"></i></a><a data-edit="insertorderedlist" title="Number list" class="btn btn-default"><i class="fa fa-list-ol"></i></a><a data-edit="outdent" title="Reduce indent (Shift+Tab)" class="btn btn-default"><i class="fa fa-outdent"></i></a><a data-edit="indent" title="Indent (Tab)" class="btn btn-default"><i class="fa fa-indent"></i></a></div>
           <div class="btn-group"><a data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)" class="btn btn-default"><i class="fa fa-align-left"></i></a><a data-edit="justifycenter" title="Center (Ctrl/Cmd+E)" class="btn btn-default"><i class="fa fa-align-center"></i></a><a data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)" class="btn btn-default"><i class="fa fa-align-right"></i></a><a data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)" class="btn btn-default"><i class="fa fa-align-justify"></i></a></div>
           <div class="btn-group"><a data-edit="undo" title="Undo (Ctrl/Cmd+Z)" class="btn btn-default"><i class="fa fa-undo"></i></a><a data-edit="redo" title="Redo (Ctrl/Cmd+Y)" class="btn btn-default"><i class="fa fa-repeat"></i></a></div>
-          <div class="btn-group"><a id="pictureBtn" title="Insert picture" class="btn btn-default"><i class="fa fa-picture-o"></i></a></div>
+          <div class="btn-group"><a id="pictureBtn" title="Insert picture" class="upload-picture btn btn-default"><i class="fa fa-picture-o"></i></a><a title="绘画板" class="toggle-drawing btn btn-default"><i class="fa fa-pencil-square-o"></i></a></div>
         </div>
-        <div class="form-group">
-          <label>绘画板</label>
-          <div id="drawing-panel"></div>
+        <div class="form-group drawing-wrapper">
+          <div id="drawing-panel" class="hide"></div>
         </div>
         <div class="picture_control form-group">
           <label>图片缩放比例：<span class="num">1.00</span></label>

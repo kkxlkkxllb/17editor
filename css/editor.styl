@@ -7,17 +7,19 @@
 	position relative
 	img
 		position absolute
+		cursor move
+		border 1px solid transparent
+		&:hover
+			border 1px dashed #ddd
 	img.active
-		opacity 0.6
+		opacity 0.8
+		border 1px solid #ddd
 .picture_control
 	display none
 .btn-toolbar
 	.btn-group
 		margin-bottom 10px
-.action
-	.btn
-		margin-right 10px
 
 #drawing-panel
 	height 300px
-	width 600px
+	width 500px

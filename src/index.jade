@@ -5,14 +5,15 @@ html(lang="en")
 	body
 		header.navbar.navbar-fixed-top.inav.navbar-default
 			.container
-				span.doc-list-menu.menu-btn
-					i.fa.fa-inbox
+				.action-menu-left
+					span.doc-list-menu.menu-btn
+						i.fa.fa-inbox
 				.brand.franklin 17Editor
-				.action-menu
+				.action-menu-right
 					span.menu-btn.save-doc(title="保存")
 						i.fa.fa-cloud-upload
 					span.menu-btn.new-doc(title="新建")
-						i.fa.fa-edit
+						i.fa.fa-file-o
 		aside#doc-list
 			.container
 		article

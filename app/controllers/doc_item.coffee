@@ -17,6 +17,8 @@ class DocItem extends Spine.Controller
 		e.preventDefault()
 		e.stopPropagation()
 		if confirm "Are u sure?"
+			if @item.eql window.app.currentDoc
+				$(".new-doc").trigger "click"
 			@item.destroy()
 
 

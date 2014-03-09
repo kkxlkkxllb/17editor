@@ -1,25 +1,16 @@
 Notify = require("lib/utils/notify")
-
-DrawingBoard.Control.CopyToEditor = DrawingBoard.Control.extend
-	name: "copy"
-	initialize: ->
-		@$el.append require("views/widgets/icon_copy")()
-		handler = (e) =>
-			@board.getImg()
-			e.preventDefault()
-		@$el.on "click", ".drawing-board-control-copy-button",handler
-
 class BaseEditor extends Spine.Controller
 	@include Notify
 	events:
 		"submit form": "onSubmit"
-		"click #pictureBtn": "uploadPic"
+		"click .upload-picture": "uploadPic"
 		"change .scale-img": "scaleImg"
 		"click #editor img": "selectImg"
 		"dragstart #editor img": "handleDragStart"
 		"dragend #editor img": "handleDragEnd"
 		"blur #editor": "handleBlur"
 		"focus #editor": "handleFocus"
+		"click .toggle-drawing": "toggleDrawing"
 	initEditor: (@$editor) ->
 		@$editor.wysiwyg
 			fileUploadError: (reason, detail) =>
@@ -29,22 +20,31 @@ class BaseEditor extends Spine.Controller
 				$(".picture_control",@$el).show()
 		@$editor.on "drop", @handleDrop
 		@$editor.on "dragover", @handleDragOver
+		# 快捷键保存文稿
+		@$editor.keydown "ctrl+s meta+s", (e) ->
+			e.preventDefault()
+			e.stopPropagation()
+			$(@).closest("form").submit()
 	initDrawBoard: (id) ->
 		options =
 			controls: [
 				'Color'
 				'Size'
-				DrawingMode:
-					filler: false
+				'DrawingMode'
 				'Navigation'
-				'Download'
-				'CopyToEditor'
+				# 'Download'
+				'PasteToEditor'
+				'SwitchSize'
 			]
 			size: 2
 			droppable: true
 			webStorage: false
 		@draw_board = new DrawingBoard.Board(id,options)
-
+	toggleDrawing: (e) ->
+		$("#drawing-panel").toggleClass "hide"
+		$(e.currentTarget).toggleClass "active"
+		unless @draw_board
+			@initDrawBoard("drawing-panel")
 	uploadPic: (e) ->
 		target_id = $(e.currentTarget).attr "id"
 		$("input[data-target='#{target_id}']").trigger "click"
@@ -52,7 +52,8 @@ class BaseEditor extends Spine.Controller
 		$img = $(e.currentTarget)
 		$img.addClass("active").siblings().removeClass("active")
 		rate = parseFloat $img.width()/$img[0].naturalWidth
-		$(".scale-img",@$el).val rate
+		$input = $(".scale-img",@$el)
+		$input.val(rate).prev().find(".num").text parseFloat(rate).toFixed(2)
 	scaleImg: (e) ->
 		$target = $(e.currentTarget)
 		rate = $target.val()
@@ -101,12 +102,13 @@ class BaseEditor extends Spine.Controller
 		@$editor.closest("form").serializeObject()
 	resetDoc: ->
 		@$editor.empty().focus()
-		@draw_board.reset(background: true)
+		@draw_board.reset(background: true) if @draw_board
 	renderWithData: (data) ->
 		$form = @$editor.closest("form")
 		$.each $("input[name],textarea[name]",$form), (i,e) ->
 			key = $(e).attr "name"
 			$(e).val data[key]
 		@$editor.html(data.raw_content).focus()
+
 
 module.exports = BaseEditor

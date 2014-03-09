@@ -28,8 +28,6 @@
 
 .drawing-board-control-inner { position: relative; height: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
 
-.drawing-board-control > button { margin: 0; vertical-align: middle; }
-
 .drawing-board-control-colors { font-size: 0; line-height: 0; }
 
 .drawing-board-control-colors-current { border: 1px solid #ccc; cursor: pointer; display: inline-block; width: 26px; height: 26px; }

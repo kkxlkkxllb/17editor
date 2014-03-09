@@ -10,26 +10,26 @@ class App extends BaseEditor
 	className: "container"
 	constructor: ->
 		super
-		Doc.bind "save", @afterSave
 		Doc.bind "edit", @handleEdit
 		@initEditor($('#editor'))
-		@initDrawBoard("drawing-panel")
+		$('a[title]').tooltip(container:'body')
 	onSubmit: (e) ->
 		e.preventDefault()
+		self = this
 		$title = $("input[name='title']",@$el)
 		if $title.val() is ""
-			@flash "标题不能为空","danger"
 			$title.focus()
+			@flash "标题不能为空","danger"
 			return false
 		if data = @getFormData()
-			Doc.create data
-	afterSave: =>
-		@flash "已保存","success"
-		$(".brand").removeClass "loading"
-		$(".doc-list-menu").trigger "click"
+			Doc.create data, done: ->
+				self.flash "已保存","success"
+				$(".brand").removeClass "loading"
+				self.renderWithData(@attributes())
 	handleEdit: (item) =>
 		$(".doc-list-menu").trigger "click"
 		@renderWithData(item.attributes())
+		@currentDoc = item
 
 class Nav extends Spine.Controller
 	el: "header"
@@ -40,7 +40,7 @@ class Nav extends Spine.Controller
 	constructor: ->
 		super
 		@doc_box = new DocList()
-		@app = new App()
+		window.app = new App()
 	handleDocBox: (e) ->
 		if $(e.currentTarget).hasClass "active"
 			@doc_box.hide()
@@ -49,12 +49,12 @@ class Nav extends Spine.Controller
 			$(window).scrollTop(0)
 		$(e.currentTarget).toggleClass "active"
 	saveDoc: (e) ->
-		@app.$el.find("form").submit()
+		window.app.$el.find("form").submit()
 	newDoc: (e) ->
-		@app.$el.find("form")[0].reset()
-		@app.resetDoc()
+		window.app.$el.find("form")[0].reset()
+		window.app.resetDoc()
 
 $ ->
-	# Spine.Model.host = "http://iweb.17up.org/api"
-	Spine.Model.host = "http://192.168.1.103:3000/api"
+	Spine.Model.host = "http://iweb.17up.org/api"
+	# Spine.Model.host = "http://192.168.1.103:3000/api"
 	new Nav()

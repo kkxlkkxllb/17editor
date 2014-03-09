@@ -27,7 +27,7 @@
       "jsAfter": "require('index')"
     },
     "css": {
-      "paths"  : ["./css","./css/lib/bootstrap.css","./css/lib/font-awesome.css","./css/lib/drawingboard.css"],
+      "paths"  : ["./css","./css/lib/bootstrap.css","./css/lib/font-awesome.css","./css/lib/drawingboard.css", "./css/lib/mathquill.css"],
       "target" : "./public/assets/application.css"
     },
     "test": {

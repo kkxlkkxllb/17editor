@@ -990,11 +990,11 @@ DrawingBoard.Control.DrawingMode = DrawingBoard.Control.extend({
 
 		$.each(["pencil", "eraser", "filler"], $.proxy(function(k, value) {
 			if (this.opts[value]) {
-				this.$el.append('<button class="drawing-board-control-drawingmode-' + value + '-button btn btn-default" data-mode="' + value + '"><i class="fa fa-' + value + '"></i></button>');
+				this.$el.append(require("views/widgets/drawing_mode")({v: value}));
 			}
 		}, this));
 
-		this.$el.on('click', 'button[data-mode]', $.proxy(function(e) {
+		this.$el.on('click', 'a[data-mode]', $.proxy(function(e) {
 			var value = $(e.currentTarget).attr('data-mode');
 			var mode = this.board.getMode();
 			if (mode !== value) this.prevMode = mode;
@@ -1011,7 +1011,7 @@ DrawingBoard.Control.DrawingMode = DrawingBoard.Control.extend({
 	},
 
 	toggleButtons: function(mode) {
-		this.$el.find('button[data-mode]').each(function(k, item) {
+		this.$el.find('a[data-mode]').each(function(k, item) {
 			var $item = $(item);
 			$item.toggleClass('active', mode === $item.attr('data-mode'));
 		});
@@ -1030,11 +1030,7 @@ DrawingBoard.Control.Navigation = DrawingBoard.Control.extend({
 	},
 
 	initialize: function() {
-		var el = '';
-		if (this.opts.back) el += '<button class="drawing-board-control-navigation-back btn btn-default"><i class="fa fa-arrow-left"></i></button>';
-		if (this.opts.forward) el += '<button class="drawing-board-control-navigation-forward btn btn-default"><i class="fa fa-arrow-right"></i></button>';
-		if (this.opts.reset) el += '<button class="drawing-board-control-navigation-reset btn btn-default"><i class="fa fa-times"></i></button>';
-		this.$el.append(el);
+		this.$el.append(require("views/widgets/board_navigate")());
 
 		if (this.opts.back) {
 			var $back = this.$el.find('.drawing-board-control-navigation-back');
@@ -1126,7 +1122,7 @@ DrawingBoard.Control.Size = DrawingBoard.Control.extend({
 
 	_rangeTemplate: function() {
 		var tpl = '<div class="drawing-board-control-inner" title="{{size}}">' +
-			'<input type="range" min="1" max="50" value="{{size}}" step="1" class="drawing-board-control-size-range-input">' +
+			'<input type="range" min="1" max="50" value="{{size}}" step="1" class="drawing-board-control-size-range-input" tabindex=-1>' +
 			'<span class="drawing-board-control-size-range-current"></span>' +
 			'</div>';
 		return DrawingBoard.Utils.tpl(tpl, { size: this.board.opts.size });
@@ -1195,16 +1191,4 @@ DrawingBoard.Control.Size = DrawingBoard.Control.extend({
 		return !!available;
 	}
 });
-DrawingBoard.Control.Download = DrawingBoard.Control.extend({
 
-	name: 'download',
-
-	initialize: function() {
-		this.$el.append('<button class="drawing-board-control-download-button btn btn-default"><i class="fa fa-download"></i></button>');
-		this.$el.on('click', '.drawing-board-control-download-button', $.proxy(function(e) {
-			this.board.downloadImg();
-			e.preventDefault();
-		}, this));
-	}
-
-});
