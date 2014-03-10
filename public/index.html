@@ -10,6 +10,7 @@
     -->
     <title>17Editor</title>
         <link rel="stylesheet" href="./assets/application.css" type="text/css" charset="utf-8" media="all">
+        <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default" type="text/javascript" charset="utf-8"></script>
         <script src="./assets/application.js" type="text/javascript" charset="utf-8"></script>
     <link href="./favicon.ico" rel="shortcut icon">
     <link href="./favicon.png" rel="apple-touch-icon-precomposed">
@@ -34,6 +35,7 @@
         </div>
         <div data-role="editor-toolbar" data-target="#editor" class="btn-toolbar form-group">
           <input type="file" data-target="pictureBtn" data-edit="insertImage" tabindex="-1" class="hidden_uploader">
+          <div class="btn-group"><a title="Preview Mode" class="btn btn-default preview"><i class="fa fa-eye"></i><i class="fa fa-eye-slash"></i></a></div>
           <div class="btn-group"><a data-toggle="dropdown" title="Font Size" class="btn btn-default dropdown-toggle"><i class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
             <ul class="font-size-list dropdown-menu">
                     <li><a data-edit="fontSize 1" href="javascript:void(0)"><font size="1">Small</font></a></li>
@@ -46,16 +48,24 @@
           <div class="btn-group"><a data-edit="insertunorderedlist" title="Bullet list" class="btn btn-default"><i class="fa fa-list-ul"></i></a><a data-edit="insertorderedlist" title="Number list" class="btn btn-default"><i class="fa fa-list-ol"></i></a><a data-edit="outdent" title="Reduce indent (Shift+Tab)" class="btn btn-default"><i class="fa fa-outdent"></i></a><a data-edit="indent" title="Indent (Tab)" class="btn btn-default"><i class="fa fa-indent"></i></a></div>
           <div class="btn-group"><a data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)" class="btn btn-default"><i class="fa fa-align-left"></i></a><a data-edit="justifycenter" title="Center (Ctrl/Cmd+E)" class="btn btn-default"><i class="fa fa-align-center"></i></a><a data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)" class="btn btn-default"><i class="fa fa-align-right"></i></a><a data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)" class="btn btn-default"><i class="fa fa-align-justify"></i></a></div>
           <div class="btn-group"><a data-edit="undo" title="Undo (Ctrl/Cmd+Z)" class="btn btn-default"><i class="fa fa-undo"></i></a><a data-edit="redo" title="Redo (Ctrl/Cmd+Y)" class="btn btn-default"><i class="fa fa-repeat"></i></a></div>
-          <div class="btn-group"><a id="pictureBtn" title="Insert picture" class="upload-picture btn btn-default"><i class="fa fa-picture-o"></i></a><a title="绘画板" class="toggle-drawing btn btn-default"><i class="fa fa-pencil-square-o"></i></a><a title="公式编写" class="insert-mathml btn btn-default"><i class="fa fa-magic"></i></a></div>
+          <div class="btn-group"><a title="Link" data-toggle="modal" data-target="#linkModal" class="btn btn-default"><i class="fa fa-link"></i></a><a id="pictureBtn" title="Insert picture" class="upload-picture btn btn-default"><i class="fa fa-picture-o"></i></a><a title="绘画板" data-toggle="modal" data-target="#drawingModal" class="btn btn-default"><i class="fa fa-pencil-square-o"></i></a><a title="公式编写" data-toggle="modal" data-target="#mathModal" class="btn btn-default"><i class="fa fa-magic"></i></a></div>
+          <div id="linkModal" class="modal fade">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" data-dismiss="modal" class="close">&times;</button>
+                  <h4 class="modal-title">Insert Link</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="input-group">
+                    <input type="text" placeholder="输入合法URL" data-edit="createLink" class="link-input form-control"><span class="input-group-btn"><a class="btn btn-primary insert-link"><i class="fa fa-plus"></i></a></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="form-group drawing-wrapper">
-          <div id="drawing-panel" class="hide"></div>
-        </div>
-        <div class="form-group mathml-wrapper hide">
-          <label>公式编辑</label>
-          <div class="mathml-box"></div>
-        </div>
-        <div class="picture_control form-group">
+        <div class="picture_control form-group hide">
           <label>图片缩放比例：<span class="num">1.00</span></label>
           <input type="range" min="0.1" max="1.0" value="1.0" step="0.05" tabindex="-1" class="scale-img form-control">
         </div>
@@ -63,6 +73,35 @@
           <label>正文</label>
           <textarea name="raw_content" class="hide"></textarea>
           <div id="editor" class="form-control"></div>
+        </div>
+        <div id="mathModal" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close">&times;</button>
+                <h4 class="modal-title">公式编辑</h4>
+              </div>
+              <div class="modal-body">
+                <div class="input-group">
+                  <input type="text" placeholder="输入 LaTeX 公式" class="form-control"><span class="input-group-btn"><a class="btn btn-primary add-mathml"><i class="fa fa-plus"></i></a></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="drawingModal" data-draw="true" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close">&times;</button>
+                <h4 class="modal-title">绘画板</h4>
+              </div>
+              <div class="modal-body">
+                <div id="drawing-panel"></div>
+              </div>
+              <div class="modal-footer"><a class="btn btn-primary paste-to-editor"><i class="fa fa-paste"></i><span class="text">插入</span></a></div>
+            </div>
+          </div>
         </div>
       </form>
     </article>

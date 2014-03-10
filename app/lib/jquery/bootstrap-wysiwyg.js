@@ -117,7 +117,7 @@
                     execCommand($(this).data(options.commandRole));
                     saveSelection();
                 });
-                toolbar.find('[data-toggle=dropdown]').click(restoreSelection);
+                toolbar.find('[data-toggle=modal]').click(restoreSelection);
 
                 toolbar.find('input[type=text][data-' + options.commandRole + ']').on('webkitspeechchange change',function () {
                     var newValue = this.value;
@@ -129,6 +129,7 @@
                         execCommand($(this).data(options.commandRole), newValue);
                     }
                     saveSelection();
+                    options.afterInsertLink();
                 }).on('focus',function () {
                         var input = $(this);
                         if (!input.data(options.selectionMarker)) {
@@ -209,6 +210,9 @@
         },
         afterUpload: function(){
           console.log("Uploaded");
+        },
+        afterInsertLink: function(){
+        	console.log("inserted");
         }
     };
 }(window.jQuery));

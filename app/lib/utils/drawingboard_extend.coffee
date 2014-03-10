@@ -1,17 +1,3 @@
-# 将绘图复制粘贴到编辑器扩展
-DrawingBoard.Control.PasteToEditor = DrawingBoard.Control.extend
-	name: "paste"
-	initialize: ->
-		@$el.append require("views/widgets/paste")()
-		handler = (e) =>
-			$("#editor").focus()
-			dataUrl = @board.getImg()
-			document.execCommand('insertimage', 0,dataUrl)
-			e.preventDefault()
-			$("#toggle-drawing").trigger "click"
-			$("#editor").focus()
-		@$el.on "click", ".drawing-board-control-paste-button",handler
-
 # 控制画布大小扩展
 DrawingBoard.Control.SwitchSize = DrawingBoard.Control.extend
 	name: "switch_size"

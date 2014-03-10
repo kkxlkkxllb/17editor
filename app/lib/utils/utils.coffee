@@ -1,4 +1,4 @@
-Notify =
+Utils =
 	flash: (msg,type = "warning",$container) ->
 		$container = $container || $("#flash_message")
 		$container.prepend require('views/widgets/flash')(msg: msg)
@@ -10,4 +10,4 @@ Notify =
 		setTimeout fuc,10000
 		false
 
-module?.exports = Notify
+module?.exports = Utils

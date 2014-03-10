@@ -7,6 +7,10 @@ form(role="form" method="post")
 	.btn-toolbar.form-group(data-role="editor-toolbar" data-target="#editor")
 		input.hidden_uploader(type="file" data-target="pictureBtn" data-edit="insertImage" tabindex=-1)
 		.btn-group
+			a.btn.btn-default.preview(title= "Preview Mode")
+				i.fa.fa-eye
+				i.fa.fa-eye-slash
+		.btn-group
 			a.btn.btn-default.dropdown-toggle(data-toggle="dropdown" title="Font Size")
 				i.fa.fa-text-height
 				| &nbsp;
@@ -54,18 +58,29 @@ form(role="form" method="post")
 			a.btn.btn-default(data-edit="redo" title="Redo (Ctrl/Cmd+Y)")
 				i.fa.fa-repeat
 		.btn-group
+			a.btn.btn-default(title="Link" data-toggle="modal" data-target="#linkModal")
+				i.fa.fa-link
 			a#pictureBtn.upload-picture.btn.btn-default(title="Insert picture")
 				i.fa.fa-picture-o
-			a.toggle-drawing.btn.btn-default(title="绘画板")
+			a.btn.btn-default(title="绘画板" data-toggle="modal" data-target="#drawingModal")
 				i.fa.fa-pencil-square-o
-			a.insert-mathml.btn.btn-default(title="公式编写")
+			a.btn.btn-default(title="公式编写" data-toggle="modal" data-target="#mathModal")
 				i.fa.fa-magic
-	.form-group.drawing-wrapper
-		#drawing-panel.hide
-	.form-group.mathml-wrapper.hide
-		label 公式编辑
-		.mathml-box
-	.picture_control.form-group
+		#linkModal.modal.fade
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(type="button" data-dismiss="modal" ) &times;
+						h4.modal-title Insert Link
+					.modal-body
+						.input-group
+							input.link-input.form-control(type="text" placeholder="输入合法URL" data-edit="createLink")
+							span.input-group-btn
+								a.btn.btn-primary.insert-link
+									i.fa.fa-plus
+	//- .form-group.drawing-wrapper
+	//- 	#drawing-panel.hide
+	.picture_control.form-group.hide
 		label
 			| 图片缩放比例：
 			span.num 1.00
@@ -74,3 +89,27 @@ form(role="form" method="post")
 		label 正文
 		textarea.hide(name= "raw_content")
 		#editor.form-control
+	#mathModal.modal.fade
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type="button" data-dismiss="modal" ) &times;
+					h4.modal-title 公式编辑
+				.modal-body
+					.input-group
+						input.form-control(type="text" placeholder="输入 LaTeX 公式")
+						span.input-group-btn
+							a.btn.btn-primary.add-mathml
+								i.fa.fa-plus
+	#drawingModal.modal.fade(data-draw="true")
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type="button" data-dismiss="modal" ) &times;
+					h4.modal-title 绘画板
+				.modal-body
+					#drawing-panel
+				.modal-footer
+					a.btn.btn-primary.paste-to-editor
+						i.fa.fa-paste
+						span.text 插入

@@ -14,12 +14,25 @@
 	img.active
 		opacity 0.8
 		border 1px dashed #999
-.picture_control
-	display none
+#editor.in-preview-mode
+	border-color transparent
+	img
+		pointer-events none
 .btn-toolbar
 	.btn-group
 		margin-bottom 10px
-
+#linkModal
+	.input-group
+		float none
 #drawing-panel
 	height 300px
-	width 500px
+	width 550px
+.preview
+	.fa-eye-slash
+		display none
+.preview.active
+	.fa-eye-slash
+		display inline-block
+	.fa-eye
+		display none
+

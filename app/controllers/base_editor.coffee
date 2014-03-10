@@ -1,24 +1,29 @@
-Notify = require("lib/utils/notify")
+Utils = require("lib/utils/utils")
 class BaseEditor extends Spine.Controller
-	@include Notify
+	@include Utils
 	events:
 		"submit form": "onSubmit"
-		"click .upload-picture": "uploadPic"
 		"change .scale-img": "scaleImg"
 		"click #editor img": "selectImg"
 		"dragstart #editor img": "handleDragStart"
 		"dragend #editor img": "handleDragEnd"
 		"blur #editor": "handleBlur"
 		"focus #editor": "handleFocus"
-		"click .toggle-drawing": "toggleDrawing"
-		"click .insert-mathml": "insertMath"
+		"click .preview": "preview"
+		"click .upload-picture": "uploadPic"
+		"shown.bs.modal .modal": "handleShowModal"
+		"click .add-mathml": "addMath"
+		"click .paste-to-editor": "pasteToEditor"
+
 	initEditor: (@$editor) ->
 		@$editor.wysiwyg
 			fileUploadError: (reason, detail) =>
 				@flash reason + detail
 			afterUpload: =>
 				$("img",@$editor).attr "draggable",true
-				$(".picture_control",@$el).show()
+				$(".picture_control",@$el).removeClass "hide"
+			afterInsertLink: ->
+				$("#linkModal").modal "hide"
 		@$editor.on "drop", @handleDrop
 		@$editor.on "dragover", @handleDragOver
 		# 快捷键保存文稿
@@ -35,19 +40,20 @@ class BaseEditor extends Spine.Controller
 				'DrawingMode'
 				'Navigation'
 				# 'Download'
-				'PasteToEditor'
-				'SwitchSize'
+				# 'SwitchSize'
 			]
 			size: 2
 			droppable: true
 			webStorage: false
 		@draw_board = new DrawingBoard.Board(id,options)
-	toggleDrawing: (e) ->
-		$("#drawing-panel").toggleClass "hide"
+	preview: (e) ->
+		tof = $(e.currentTarget).hasClass("active")
+		if $("img",@$editor).length isnt 0
+			$("img",@$editor).attr "draggable",tof
+			$(".picture_control",@$el).toggleClass "hide",!tof
+		@$editor.attr "contenteditable",tof
+		@$editor.toggleClass "in-preview-mode"
 		$(e.currentTarget).toggleClass "active"
-		unless @draw_board
-			@initDrawBoard("drawing-panel")
-			$('a[title]').tooltip(container: '#drawing-panel')
 	uploadPic: (e) ->
 		target_id = $(e.currentTarget).attr "id"
 		$("input[data-target='#{target_id}']").trigger "click"
@@ -72,10 +78,7 @@ class BaseEditor extends Spine.Controller
 		@$editor.prev().val @$editor.cleanHtml()
 	handleFocus: (e) ->
 		$imgs = $(e.currentTarget).find("img")
-		if $imgs.length > 0
-			$(".picture_control",@$el).show()
-		else
-			$(".picture_control",@$el).hide()
+		$(".picture_control",@$el).toggleClass "hide",!$imgs.length
 		$imgs
 	handleDragStart: (e) ->
 		position = $(e.currentTarget).addClass("dragging").position()
@@ -113,8 +116,25 @@ class BaseEditor extends Spine.Controller
 			key = $(e).attr "name"
 			$(e).val data[key]
 		@$editor.html(data.raw_content).focus()
-	insertMath: (e) ->
-		$(e.currentTarget).toggleClass "active"
-		$(".mathml-wrapper",@$el).toggleClass "hide"
+	handleShowModal: (e) ->
+		$(e.currentTarget).find("input[type='text']").focus()
+		if $(e.currentTarget).data("draw")
+			unless @draw_board
+				@initDrawBoard("drawing-panel")
+				$('a[title]').tooltip(container: '#drawing-panel')
+	pasteToEditor: (e) ->
+		$modal = $(e.currentTarget).closest(".modal")
+		$modal.modal "hide"
+		@$editor.focus()
+		dataUrl = @draw_board.getImg()
+		document.execCommand('insertimage', 0,dataUrl)
+		@$editor.focus()
+	addMath: (e) ->
+		$modal = $(e.currentTarget).closest(".modal")
+		$modal.modal "hide"
+		html = $("input",$modal).val()
+		@$editor.focus()
+		document.execCommand("insertHTML",false,html)
+
 
 module.exports = BaseEditor
