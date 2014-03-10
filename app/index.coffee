@@ -39,14 +39,12 @@ class Nav extends Spine.Controller
 		"click .new-doc": "newDoc"
 	constructor: ->
 		super
-		@doc_box = new DocList()
 		window.app = new App()
+		@doc_box = new DocList()
 	handleDocBox: (e) ->
-		if $(e.currentTarget).hasClass "active"
-			@doc_box.hide()
-		else
-			@doc_box.show()
-			$(window).scrollTop(0)
+		tof = $(e.currentTarget).hasClass "active"
+		@doc_box.$el.toggleClass "hide",tof
+		$(window).scrollTop(0)
 		$(e.currentTarget).toggleClass "active"
 	saveDoc: (e) ->
 		window.app.$el.find("form").submit()

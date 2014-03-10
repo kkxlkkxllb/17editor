@@ -74,7 +74,6 @@ class BaseEditor extends Spine.Controller
 			$img.width $img[0].naturalWidth * rate
 	handleBlur: (e) ->
 		$imgs = @handleFocus(e)
-		$imgs.removeClass "active"
 		@$editor.prev().val @$editor.cleanHtml()
 	handleFocus: (e) ->
 		$imgs = $(e.currentTarget).find("img")

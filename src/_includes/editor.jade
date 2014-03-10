@@ -18,6 +18,13 @@ form(role="form" method="post")
 			ul.font-size-list.dropdown-menu
 				+fontSize_list()
 		.btn-group
+			a.btn.btn-default.dropdown-toggle(data-toggle="dropdown" title="Fonts")
+				i.fa.fa-font
+				| &nbsp;
+				b.caret
+			ul.font-size-list.dropdown-menu
+				+fonts_list()
+		.btn-group
 			//- a.btn.btn-default(data-edit="FormatBlock h1" title="Format H1")
 			//- 	| H1
 			a.btn.btn-default(data-edit="bold" title="Bold (Ctrl/Cmd+B)")
@@ -60,6 +67,9 @@ form(role="form" method="post")
 		.btn-group
 			a.btn.btn-default(title="Link" data-toggle="modal" data-target="#linkModal")
 				i.fa.fa-link
+			a.btn.btn-default(title="unLink" data-edit="unlink")
+				i.fa.fa-unlink
+		.btn-group
 			a#pictureBtn.upload-picture.btn.btn-default(title="Insert picture")
 				i.fa.fa-picture-o
 			a.btn.btn-default(title="绘画板" data-toggle="modal" data-target="#drawingModal")

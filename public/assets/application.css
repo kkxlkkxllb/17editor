@@ -14,13 +14,19 @@ input[type='range']:focus{-webkit-box-shadow:none}
 .inav .container .brand{top:0;font-size:2.2em;position:absolute;line-height:50px;left:50%;margin-left:-50px}
 .inav .container .brand.loading{-webkit-animation:breath 1.5s infinite ease-in-out}
 article{margin-top:48px;position:relative;padding:20px 10px}
+.copyright{margin:20px 0}
 #editor{overflow-y:auto;overflow-x:hidden;min-height:600px;height:auto !important;position:relative;}
 #editor img{position:absolute;cursor:move;border:1px solid transparent;}
 #editor img:hover{border:1px dashed #999}
 #editor img.active{opacity:.8;border:1px dashed #999}
-.picture_control{display:none}
+#editor.in-preview-mode{border-color:transparent;}
+#editor.in-preview-mode img{pointer-events:none;opacity:1;border:none}
 .btn-toolbar .btn-group{margin-bottom:10px}
-#drawing-panel{height:300px;width:500px}
+#linkModal .input-group{float:none}
+#drawing-panel{height:300px;width:550px}
+.preview .fa-eye-slash{display:none}
+.preview.active .fa-eye-slash{display:inline-block}
+.preview.active .fa-eye{display:none}
 #doc-list{margin-top:50px;padding-top:20px;border-bottom:1px solid #e7e7e7;display:none;}
 #doc-list .item{position:relative;}
 #doc-list .item .panel{cursor:pointer;}

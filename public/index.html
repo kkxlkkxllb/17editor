@@ -23,7 +23,7 @@
         <div class="action-menu-right"><span title="保存" class="menu-btn save-doc"><i class="fa fa-cloud-upload"></i></span><span title="新建" class="menu-btn new-doc"><i class="fa fa-file-o"></i></span></div>
       </div>
     </header>
-    <aside id="doc-list">
+    <aside id="doc-list" class="hide">
       <div class="container"></div>
     </aside>
     <article>
@@ -43,12 +43,32 @@
                     <li><a data-edit="fontSize 5" href="javascript:void(0)"><font size="5">Huge</font></a></li>
             </ul>
           </div>
+          <div class="btn-group"><a data-toggle="dropdown" title="Fonts" class="btn btn-default dropdown-toggle"><i class="fa fa-font"></i>&nbsp;<b class="caret"></b></a>
+            <ul class="font-size-list dropdown-menu">
+                    <li><a data-edit="fontName Serif" style="font-family:Serif" href="javascript:void(0)">Serif</a></li>
+                    <li><a data-edit="fontName Sans" style="font-family:Sans" href="javascript:void(0)">Sans</a></li>
+                    <li><a data-edit="fontName Arial" style="font-family:Arial" href="javascript:void(0)">Arial</a></li>
+                    <li><a data-edit="fontName Arial Black" style="font-family:Arial Black" href="javascript:void(0)">Arial Black</a></li>
+                    <li><a data-edit="fontName Courier" style="font-family:Courier" href="javascript:void(0)">Courier</a></li>
+                    <li><a data-edit="fontName Courier New" style="font-family:Courier New" href="javascript:void(0)">Courier New</a></li>
+                    <li><a data-edit="fontName Comic Sans MS" style="font-family:Comic Sans MS" href="javascript:void(0)">Comic Sans MS</a></li>
+                    <li><a data-edit="fontName Helvetica" style="font-family:Helvetica" href="javascript:void(0)">Helvetica</a></li>
+                    <li><a data-edit="fontName Impact" style="font-family:Impact" href="javascript:void(0)">Impact</a></li>
+                    <li><a data-edit="fontName Lucida Grande" style="font-family:Lucida Grande" href="javascript:void(0)">Lucida Grande</a></li>
+                    <li><a data-edit="fontName Lucida Sans" style="font-family:Lucida Sans" href="javascript:void(0)">Lucida Sans</a></li>
+                    <li><a data-edit="fontName Tahoma" style="font-family:Tahoma" href="javascript:void(0)">Tahoma</a></li>
+                    <li><a data-edit="fontName Times" style="font-family:Times" href="javascript:void(0)">Times</a></li>
+                    <li><a data-edit="fontName Times New Roman" style="font-family:Times New Roman" href="javascript:void(0)">Times New Roman</a></li>
+                    <li><a data-edit="fontName Verdana" style="font-family:Verdana" href="javascript:void(0)">Verdana</a></li>
+            </ul>
+          </div>
           <div class="btn-group"><a data-edit="bold" title="Bold (Ctrl/Cmd+B)" class="btn btn-default"><i class="fa fa-bold"></i></a><a data-edit="italic" title="Italic (Ctrl/Cmd+I)" class="btn btn-default"><i class="fa fa-italic"></i></a><a data-edit="strikethrough" title="Strikethrough" class="btn btn-default"><i class="fa fa-strikethrough"></i></a><a data-edit="underline" title="Underline (Ctrl/Cmd+U)" class="btn btn-default"><i class="fa fa-underline"></i></a><a data-edit="SuperScript" title="Superscript" class="btn btn-default"><i class="fa fa-superscript"></i></a><a data-edit="SubScript" title="Subscript" class="btn btn-default"><i class="fa fa-subscript"></i></a><a data-edit="RemoveFormat" title="Clean" class="btn btn-default"><i class="fa fa-eraser"></i></a>
           </div>
           <div class="btn-group"><a data-edit="insertunorderedlist" title="Bullet list" class="btn btn-default"><i class="fa fa-list-ul"></i></a><a data-edit="insertorderedlist" title="Number list" class="btn btn-default"><i class="fa fa-list-ol"></i></a><a data-edit="outdent" title="Reduce indent (Shift+Tab)" class="btn btn-default"><i class="fa fa-outdent"></i></a><a data-edit="indent" title="Indent (Tab)" class="btn btn-default"><i class="fa fa-indent"></i></a></div>
           <div class="btn-group"><a data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)" class="btn btn-default"><i class="fa fa-align-left"></i></a><a data-edit="justifycenter" title="Center (Ctrl/Cmd+E)" class="btn btn-default"><i class="fa fa-align-center"></i></a><a data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)" class="btn btn-default"><i class="fa fa-align-right"></i></a><a data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)" class="btn btn-default"><i class="fa fa-align-justify"></i></a></div>
           <div class="btn-group"><a data-edit="undo" title="Undo (Ctrl/Cmd+Z)" class="btn btn-default"><i class="fa fa-undo"></i></a><a data-edit="redo" title="Redo (Ctrl/Cmd+Y)" class="btn btn-default"><i class="fa fa-repeat"></i></a></div>
-          <div class="btn-group"><a title="Link" data-toggle="modal" data-target="#linkModal" class="btn btn-default"><i class="fa fa-link"></i></a><a id="pictureBtn" title="Insert picture" class="upload-picture btn btn-default"><i class="fa fa-picture-o"></i></a><a title="绘画板" data-toggle="modal" data-target="#drawingModal" class="btn btn-default"><i class="fa fa-pencil-square-o"></i></a><a title="公式编写" data-toggle="modal" data-target="#mathModal" class="btn btn-default"><i class="fa fa-magic"></i></a></div>
+          <div class="btn-group"><a title="Link" data-toggle="modal" data-target="#linkModal" class="btn btn-default"><i class="fa fa-link"></i></a><a title="unLink" data-edit="unlink" class="btn btn-default"><i class="fa fa-unlink"></i></a></div>
+          <div class="btn-group"><a id="pictureBtn" title="Insert picture" class="upload-picture btn btn-default"><i class="fa fa-picture-o"></i></a><a title="绘画板" data-toggle="modal" data-target="#drawingModal" class="btn btn-default"><i class="fa fa-pencil-square-o"></i></a><a title="公式编写" data-toggle="modal" data-target="#mathModal" class="btn btn-default"><i class="fa fa-magic"></i></a></div>
           <div id="linkModal" class="modal fade">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -105,6 +125,9 @@
         </div>
       </form>
     </article>
+    <footer>
+      <div class="copyright franklin text-center">Designed by veggie 2014<br>© Copyright 17up 工作室</div>
+    </footer>
     <div id="flash_message"></div>
   </body>
 </html>

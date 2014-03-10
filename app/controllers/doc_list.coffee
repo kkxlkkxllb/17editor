@@ -15,9 +15,5 @@ class DocList extends Spine.Controller
 				$(".container",@$el).prepend view.render()
 			else
 				$(".container",@$el).append view.render()
-	hide: ->
-		@$el.hide()
-	show: ->
-		@$el.show()
 
 module.exports = DocList
