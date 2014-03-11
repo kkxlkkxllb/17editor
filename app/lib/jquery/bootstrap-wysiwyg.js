@@ -55,7 +55,11 @@
                         if (editor.attr('contenteditable') && editor.is(':visible')) {
                             e.preventDefault();
                             e.stopPropagation();
-                            execCommand(command);
+                            if (typeof command === "function"){
+                              command(this);
+                            }else{
+                              execCommand(command);
+                            }
                         }
                     }).keyup(hotkey, function (e) {
                             if (editor.attr('contenteditable') && editor.is(':visible')) {
@@ -117,10 +121,13 @@
                     execCommand($(this).data(options.commandRole));
                     saveSelection();
                 });
-                toolbar.find('[data-toggle=modal]').click(restoreSelection);
+                toolbar.find('[data-toggle=modal],[data-toggle=dropdown]').click(restoreSelection);
 
-                toolbar.find('input[type=text][data-' + options.commandRole + ']').on('webkitspeechchange change',function () {
-                    var newValue = this.value;
+                toolbar.find('input[type=text][data-' + options.commandRole + ']').on('change',function () {
+                    if($(this).data("format") === "latex")
+                    	var newValue = toolbar.find(".inline-format")[0].checked ? ("\\(" + this.value + "\\)") : ("$$" + this.value + "$$");
+                  	else
+                    	var newValue = this.value;
                     /* ugly but prevents fake double-calls due to selection restoration */
                     this.value = '';
                     restoreSelection();
@@ -129,7 +136,7 @@
                         execCommand($(this).data(options.commandRole), newValue);
                     }
                     saveSelection();
-                    options.afterInsertLink();
+                   $(".modal").modal("hide");
                 }).on('focus',function () {
                         var input = $(this);
                         if (!input.data(options.selectionMarker)) {
@@ -210,9 +217,6 @@
         },
         afterUpload: function(){
           console.log("Uploaded");
-        },
-        afterInsertLink: function(){
-        	console.log("inserted");
         }
     };
 }(window.jQuery));

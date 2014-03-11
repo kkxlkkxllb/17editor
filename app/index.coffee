@@ -30,7 +30,8 @@ class App extends BaseEditor
 		$(".doc-list-menu").trigger "click"
 		@renderWithData(item.attributes())
 		@currentDoc = item
-
+		if $(".preview",@$el).hasClass "active"
+			$(".preview",@$el).trigger "click"
 class Nav extends Spine.Controller
 	el: "header"
 	events:

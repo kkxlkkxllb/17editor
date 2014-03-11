@@ -14,18 +14,21 @@
 	img.active
 		opacity 0.8
 		border 1px dashed #999
-#editor.in-preview-mode
-	border-color transparent
+#preview-panel
+	min-height 600px
+	height auto !important
+	position relative
 	img
-		pointer-events none
-		opacity 1
-		border none
+		position absolute
 .btn-toolbar
 	.btn-group
 		margin-bottom 10px
-#linkModal
+.modal
 	.input-group
-		float none
+		float none !important
+#MathOutput
+	pointer-events none
+	margin 0
 #drawing-panel
 	height 300px
 	width 550px

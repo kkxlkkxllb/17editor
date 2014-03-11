@@ -12,7 +12,7 @@ class BaseEditor extends Spine.Controller
 		"click .preview": "preview"
 		"click .upload-picture": "uploadPic"
 		"shown.bs.modal .modal": "handleShowModal"
-		"click .add-mathml": "addMath"
+		"keyup .math-input": "renderMath"
 		"click .paste-to-editor": "pasteToEditor"
 
 	initEditor: (@$editor) ->
@@ -22,16 +22,13 @@ class BaseEditor extends Spine.Controller
 			afterUpload: =>
 				$("img",@$editor).attr "draggable",true
 				$(".picture_control",@$el).removeClass "hide"
-			afterInsertLink: ->
-				$("#linkModal").modal "hide"
+			hotKeys:
+				# 快捷键保存文稿
+				"ctrl+s meta+s": (editor) ->
+					$(editor).prev().val $(editor).cleanHtml()
+					$(editor).closest("form").submit()
 		@$editor.on "drop", @handleDrop
 		@$editor.on "dragover", @handleDragOver
-		# 快捷键保存文稿
-		@$editor.keydown "ctrl+s meta+s", (e) ->
-			e.preventDefault()
-			e.stopPropagation()
-			$(@).prev().val $(@).cleanHtml()
-			$(@).closest("form").submit()
 	initDrawBoard: (id) ->
 		options =
 			controls: [
@@ -48,11 +45,11 @@ class BaseEditor extends Spine.Controller
 		@draw_board = new DrawingBoard.Board(id,options)
 	preview: (e) ->
 		tof = $(e.currentTarget).hasClass("active")
-		if $("img",@$editor).length isnt 0
-			$("img",@$editor).attr "draggable",tof
-			$(".picture_control",@$el).toggleClass "hide",!tof
-		@$editor.attr "contenteditable",tof
-		@$editor.toggleClass "in-preview-mode"
+		$(".editor-mian-wrapper",@$el).toggleClass "hide",!tof
+		$(".preview-panel-wrapper",@$el).toggleClass "hide",tof
+		unless tof
+			$("#preview-panel").html @$editor.html()
+			MathJax.Hub.Queue(["Typeset",MathJax.Hub,"preview-panel"])
 		$(e.currentTarget).toggleClass "active"
 	uploadPic: (e) ->
 		target_id = $(e.currentTarget).attr "id"
@@ -128,12 +125,10 @@ class BaseEditor extends Spine.Controller
 		dataUrl = @draw_board.getImg()
 		document.execCommand('insertimage', 0,dataUrl)
 		@$editor.focus()
-	addMath: (e) ->
-		$modal = $(e.currentTarget).closest(".modal")
-		$modal.modal "hide"
-		html = $("input",$modal).val()
-		@$editor.focus()
-		document.execCommand("insertHTML",false,html)
-
+	renderMath: (e) ->
+		text = $(e.currentTarget).val()
+		html = if $(".inline-format",@$el)[0].checked then "\\(" + text + "\\)" else "$$" + text + "$$"
+		$("#MathOutput").html html
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub,"MathOutput"])
 
 module.exports = BaseEditor

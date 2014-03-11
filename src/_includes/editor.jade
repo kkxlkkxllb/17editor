@@ -5,7 +5,7 @@ form(role="form" method="post")
 		label 标题
 		input.form-control(type="text" name="title" placeholder= "输入课程标题" required="required")
 	.btn-toolbar.form-group(data-role="editor-toolbar" data-target="#editor")
-		input.hidden_uploader(type="file" data-target="pictureBtn" data-edit="insertImage" tabindex=-1)
+		input.hidden_uploader(type="file" accept="image/png,image/gif,image/jpeg" data-target="pictureBtn" data-edit="insertImage" tabindex=-1)
 		.btn-group
 			a.btn.btn-default.preview(title= "Preview Mode")
 				i.fa.fa-eye
@@ -75,7 +75,7 @@ form(role="form" method="post")
 			a.btn.btn-default(title="绘画板" data-toggle="modal" data-target="#drawingModal")
 				i.fa.fa-pencil-square-o
 			a.btn.btn-default(title="公式编写" data-toggle="modal" data-target="#mathModal")
-				i.fa.fa-magic
+				i.fa.fa-code
 		#linkModal.modal.fade
 			.modal-dialog
 				.modal-content
@@ -86,31 +86,42 @@ form(role="form" method="post")
 						.input-group
 							input.link-input.form-control(type="text" placeholder="输入合法URL" data-edit="createLink")
 							span.input-group-btn
-								a.btn.btn-primary.insert-link
+								a.btn.btn-primary
 									i.fa.fa-plus
-	//- .form-group.drawing-wrapper
-	//- 	#drawing-panel.hide
-	.picture_control.form-group.hide
-		label
-			| 图片缩放比例：
-			span.num 1.00
-		input.scale-img.form-control(type="range" min="0.1" max="1.0" value="1.0" step="0.05" tabindex=-1)
-	.form-group
-		label 正文
-		textarea.hide(name= "raw_content")
-		#editor.form-control
-	#mathModal.modal.fade
-		.modal-dialog
-			.modal-content
-				.modal-header
-					button.close(type="button" data-dismiss="modal" ) &times;
-					h4.modal-title 公式编辑
-				.modal-body
-					.input-group
-						input.form-control(type="text" placeholder="输入 LaTeX 公式")
-						span.input-group-btn
-							a.btn.btn-primary.add-mathml
-								i.fa.fa-plus
+		#mathModal.modal.fade
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(type="button" data-dismiss="modal" ) &times;
+						h4.modal-title 公式编辑
+					.modal-body
+						.form-group.checkbox
+							label
+								input.inline-format(type="checkbox" checked)
+								| Inline
+						.form-group
+							.input-group
+								input.math-input.form-control(type="text" placeholder="输入 LaTeX 公式" data-edit="insertHTML" data-format="latex")
+								span.input-group-btn
+									a.btn.btn-primary
+										i.fa.fa-plus
+						.form-group
+							label Preview
+							#MathOutput.well
+	.editor-mian-wrapper
+		.picture_control.form-group.hide
+			label
+				| 图片缩放比例：
+				span.num 1.00
+			input.scale-img.form-control(type="range" min="0.1" max="1.0" value="1.0" step="0.05" tabindex=-1)
+		.form-group
+			label 正文
+			textarea.hide(name= "raw_content")
+			#editor.form-control
+	.form-group.preview-panel-wrapper.hide
+		label 预览
+		#preview-panel.well
+
 	#drawingModal.modal.fade(data-draw="true")
 		.modal-dialog
 			.modal-content

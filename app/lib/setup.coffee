@@ -26,8 +26,3 @@ $.ajaxSetup
 	xhrFields:
 		withCredentials: true
 	crossDomain: true
-
-#  $.parseUrl().token
-$.parseUrl = ( url = location.href ) ->
-	params = {}
-	( ( parts = part.split( "=" ) ) && params[ parts[0] ] = parts[1] for part in ( url.split "?" ).pop().split "&" if url.indexOf( "?" ) != -1 ) && params || {}
