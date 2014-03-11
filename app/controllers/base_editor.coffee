@@ -47,6 +47,7 @@ class BaseEditor extends Spine.Controller
 		tof = $(e.currentTarget).hasClass("active")
 		$(".editor-mian-wrapper",@$el).toggleClass "hide",!tof
 		$(".preview-panel-wrapper",@$el).toggleClass "hide",tof
+		$(e.currentTarget).parent().siblings().find("a.btn").toggleClass "disabled",!tof
 		unless tof
 			$("#preview-panel").html @$editor.html()
 			MathJax.Hub.Queue(["Typeset",MathJax.Hub,"preview-panel"])

@@ -50,8 +50,11 @@ class Nav extends Spine.Controller
 	saveDoc: (e) ->
 		window.app.$el.find("form").submit()
 	newDoc: (e) ->
+		if $(".preview",window.app.$el).hasClass "active"
+			$(".preview",window.app.$el).trigger "click"
 		window.app.$el.find("form")[0].reset()
 		window.app.resetDoc()
+
 
 $ ->
 	Spine.Model.host = "http://iweb.17up.org/api"

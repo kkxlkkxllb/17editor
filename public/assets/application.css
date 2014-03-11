@@ -20,7 +20,7 @@ article{margin-top:48px;position:relative;padding:20px 10px}
 #editor img:hover{border:1px dashed #999}
 #editor img.active{opacity:.8;border:1px dashed #999}
 #preview-panel{min-height:600px;height:auto !important;position:relative;}
-#preview-panel img{position:absolute}
+#preview-panel img{position:absolute;pointer-events:none}
 .btn-toolbar .btn-group{margin-bottom:10px}
 .modal .input-group{float:none !important}
 #MathOutput{pointer-events:none;margin:0}

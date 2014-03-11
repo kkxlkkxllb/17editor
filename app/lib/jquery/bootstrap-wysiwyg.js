@@ -4,14 +4,16 @@
 (function ($) {
     'use strict';
     var readFileIntoDataUrl = function (fileInfo) {
-        var loader = $.Deferred(),
-            fReader = new FileReader();
-        fReader.onload = function (e) {
-            loader.resolve(e.target.result);
-        };
-        fReader.onerror = loader.reject;
-        fReader.onprogress = loader.notify;
-        fReader.readAsDataURL(fileInfo);
+        var loader = $.Deferred();
+       $.canvasResize(fileInfo,{
+          width: 300,
+          height: 300,
+          crop: false,
+          quality: 80,
+          callback: function(data, width, height) {
+               loader.resolve(data);
+         }
+      });
         return loader.promise();
     };
     $.fn.cleanHtml = function () {
@@ -125,9 +127,9 @@
 
                 toolbar.find('input[type=text][data-' + options.commandRole + ']').on('change',function () {
                     if($(this).data("format") === "latex")
-                    	var newValue = toolbar.find(".inline-format")[0].checked ? ("\\(" + this.value + "\\)") : ("$$" + this.value + "$$");
-                  	else
-                    	var newValue = this.value;
+                      var newValue = toolbar.find(".inline-format")[0].checked ? ("\\(" + this.value + "\\)") : ("$$" + this.value + "$$");
+                    else
+                      var newValue = this.value;
                     /* ugly but prevents fake double-calls due to selection restoration */
                     this.value = '';
                     restoreSelection();
@@ -171,7 +173,7 @@
             };
         options = $.extend({}, $.fn.wysiwyg.defaults, userOptions);
         toolbarBtnSelector = 'a[data-' + options.commandRole + '],button[data-' + options.commandRole + '],input[type=button][data-' + options.commandRole + ']';
-        bindHotkeys(options.hotKeys);
+        bindHotkeys($.extend({},$.fn.wysiwyg.defaults.hotKeys,options.hotKeys));
         if (options.dragAndDropImages) {
             initFileDrops();
         }
