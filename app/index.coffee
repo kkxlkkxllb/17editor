@@ -11,6 +11,8 @@ class App extends BaseEditor
 	constructor: ->
 		super
 		Doc.bind "edit", @handleEdit
+		Doc.bind "ajaxError", @handleAjaxError
+		Doc.bind "serverError", @handleServerError
 		@initEditor($('#editor'))
 		$('a[title]').tooltip(container: '.btn-toolbar')
 	onSubmit: (e) ->
@@ -32,6 +34,11 @@ class App extends BaseEditor
 		@currentDoc = item
 		if $(".preview",@$el).hasClass "active"
 			$(".preview",@$el).trigger "click"
+	handleAjaxError: (xhr,stat,e) =>
+		@flash "[#{stat.status}] #{e}","danger"
+	handleServerError: (msg) =>
+		@flash msg,"danger"
+
 class Nav extends Spine.Controller
 	el: "header"
 	events:

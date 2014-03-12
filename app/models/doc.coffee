@@ -3,7 +3,11 @@ class Doc extends Spine.Model
 	@extend Spine.Model.Ajax
 
 	@fromJSON: (json) ->
-		super([].concat json.data)
+		if json.status is 0
+			super([].concat json.data)
+		else
+			@trigger "serverError",json.msg
+			super([])
 
 module.exports = Doc
 
