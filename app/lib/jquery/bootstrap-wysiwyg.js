@@ -171,9 +171,9 @@
                         }
                     });
             };
-        options = $.extend({}, $.fn.wysiwyg.defaults, userOptions);
+        options = $.extend(true, $.fn.wysiwyg.defaults, userOptions);
         toolbarBtnSelector = 'a[data-' + options.commandRole + '],button[data-' + options.commandRole + '],input[type=button][data-' + options.commandRole + ']';
-        bindHotkeys($.extend({},$.fn.wysiwyg.defaults.hotKeys,options.hotKeys));
+        bindHotkeys(options.hotKeys);
         if (options.dragAndDropImages) {
             initFileDrops();
         }

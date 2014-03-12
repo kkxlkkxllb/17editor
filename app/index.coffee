@@ -52,7 +52,9 @@ class Nav extends Spine.Controller
 	newDoc: (e) ->
 		if $(".preview",window.app.$el).hasClass "active"
 			$(".preview",window.app.$el).trigger "click"
-		window.app.$el.find("form")[0].reset()
+		$form = window.app.$el.find("form")
+		$form[0].reset()
+		$form.find("input[type='hidden']").val ""
 		window.app.resetDoc()
 
 
