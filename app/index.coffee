@@ -28,6 +28,7 @@ class App extends BaseEditor
 				self.flash "已保存","success"
 				$(".brand").removeClass "loading"
 				self.renderWithData(@attributes())
+				Doc.trigger "prepend", @
 	handleEdit: (item) =>
 		$(".doc-list-menu").trigger "click"
 		@renderWithData(item.attributes())
@@ -66,6 +67,6 @@ class Nav extends Spine.Controller
 
 
 $ ->
-	Spine.Model.host = "http://iweb.17up.org/api"
-	# Spine.Model.host = "http://192.168.1.103:3000/api"
+	# Spine.Model.host = "http://iweb.17up.org/api"
+	Spine.Model.host = "http://192.168.1.103:3000/api"
 	new Nav()

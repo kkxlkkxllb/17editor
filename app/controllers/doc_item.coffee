@@ -7,12 +7,18 @@ class DocItem extends Spine.Controller
 		"click .delete": "handleDelete"
 	constructor: ->
 		super
-		@item.bind "destroy",@release
-		@item.bind "update", @release
+		@item.one "destroy",@release
+		@item.one "update", @release
 	render: ->
 		@html require("views/items/doc")(@item)
 	handleEdit: (e) ->
-		Doc.trigger "edit",@item
+		if @item.raw_content
+			Doc.trigger "edit",@item
+		else
+			$(".brand").addClass "loading"
+			@item.ajax().reload {},done: ->
+				Doc.trigger "edit",@
+				$(".brand").removeClass "loading"
 	handleDelete: (e) ->
 		e.preventDefault()
 		e.stopPropagation()
@@ -20,6 +26,5 @@ class DocItem extends Spine.Controller
 			if @item.eql window.app.currentDoc
 				$(".new-doc").trigger "click"
 			@item.destroy()
-
 
 module.exports = DocItem

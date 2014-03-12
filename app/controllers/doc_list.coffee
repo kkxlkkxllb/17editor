@@ -5,15 +5,16 @@ class DocList extends Spine.Controller
 	el: "#doc-list"
 	constructor: ->
 		super
-		Doc.bind "refresh", @render
+		Doc.one "refresh", @render
+		Doc.bind "prepend", @prepend
 		Doc.fetch {},clear: true
 	render: (items) =>
 		items = [].concat items
 		for doc in items
 			view = new DocItem(item: doc)
-			if items.length is 1
-				$(".container",@$el).prepend view.render()
-			else
-				$(".container",@$el).append view.render()
+			$(".container",@$el).append view.render()
+	prepend: (doc) =>
+		view = new DocItem(item: doc)
+		$(".container",@$el).prepend view.render()
 
 module.exports = DocList
