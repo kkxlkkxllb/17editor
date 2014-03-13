@@ -128,10 +128,20 @@
 
 			toolbar.find("input[type=text][data-" + options.commandRole + "]").next().on "click",->
 				$input = $(@).prev()
-				if $input.data("format") is "latex"
-					newValue = (if toolbar.find(".inline-format")[0].checked then ("\\(" + $input.val() + "\\)") else ("$$" + $input.val() + "$$"))
-				else
-					newValue = $input.val()
+				switch $input.data("format")
+					when "latex"
+						newValue = (if toolbar.find(".inline-format")[0].checked then ("\\(" + $input.val() + "\\)") else ("$$" + $input.val() + "$$"))
+					when "url"
+						newValue = $input.val()
+						regx = new RegExp("https?://.+")
+						if regx.test newValue
+							$input.closest(".form-group").removeClass "has-error"
+						else
+							$input.closest(".form-group").addClass "has-error"
+							return false
+					else
+						newValue = $input.val()
+
 				$input.val("")
 				restoreSelection()
 				if newValue
