@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf8" />
   <title>Jasmine Test Runner</title>
-  <link rel="stylesheet" type="text/css" href="lib/jasmine.css">
-  <script type="text/javascript" src="lib/jasmine.js"></script>
-  <script type="text/javascript" src="lib/jasmine-html.js"></script>
+  <link rel="stylesheet" type="text/css" href="test/lib/jasmine.css">
+  <script type="text/javascript" src="test/lib/jasmine.js"></script>
+  <script type="text/javascript" src="test/lib/jasmine-html.js"></script>
 </head>
 <body>
 
@@ -51,8 +51,8 @@
   window.onload = function() {
     // determine javascript path based on file:/http: protocol
     var http          = (location.protocol === "http:")
-    var applicationJS = http ? "../application.js" : "../../public/application.js"
-    var testSpecsJS   = "specs.js"
+    var applicationJS = http ? "../assets/application.js" : "../../public/assets/application.js"
+    var testSpecsJS   = "test/specs.js"
 
     // dynamically load application and specs javascript files
     loadScript(applicationJS, function() { loadScript(testSpecsJS, startJasmine) })

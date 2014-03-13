@@ -15,3 +15,11 @@ harp compile ./ deploy
 
 `10^{2}`
 
+------------------
+
+### setup test
+
+```
+hem server
+localhost:9295/test
+```
