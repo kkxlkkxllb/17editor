@@ -67,6 +67,6 @@ class Nav extends Spine.Controller
 
 
 $ ->
-	# Spine.Model.host = "http://iweb.17up.org/api"
-	Spine.Model.host = "http://192.168.1.103:3000/api"
+	Spine.Model.host = "http://iweb.17up.org/api"
+	# Spine.Model.host = "http://192.168.1.103:3000/api"
 	new Nav()

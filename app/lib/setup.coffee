@@ -15,7 +15,7 @@ require("lib/jquery/jquery.exif")
 require("lib/jquery/jquery.canvasResize")
 require("lib/jquery/jquery.serializeObject")
 require("lib/jquery/jquery.hotkeys")
-require("lib/jquery/bootstrap-wysiwyg")
+require("lib/jquery/wysiwyg")
 
 require("lib/utils/drawingboard")
 require("lib/utils/drawingboard_extend")

@@ -12,7 +12,9 @@ class BaseEditor extends Spine.Controller
 		"click .preview": "preview"
 		"click .upload-picture": "uploadPic"
 		"shown.bs.modal .modal": "handleShowModal"
-		"keyup .math-input": "renderMath"
+		"keyup .math-input": "handleMathInput"
+		"keyup .link-input": "triggerSubmit"
+		"change .inline-format": "triggerMathRender"
 		"click .paste-to-editor": "pasteToEditor"
 
 	initEditor: (@$editor) ->
@@ -126,8 +128,17 @@ class BaseEditor extends Spine.Controller
 		dataUrl = @draw_board.getImg()
 		document.execCommand('insertimage', 0,dataUrl)
 		@$editor.focus()
-	renderMath: (e) ->
-		text = $(e.currentTarget).val()
+	triggerMathRender: ->
+		@renderMath $(".math-input",@$el).val()
+	triggerSubmit: (e) ->
+		if e.keyCode is 13
+			e.preventDefault()
+			$(e.currentTarget).next().trigger "click"
+			return false
+	handleMathInput: (e) ->
+		@triggerSubmit(e)
+		@renderMath $(e.currentTarget).val()
+	renderMath: (text) ->
 		html = if $(".inline-format",@$el)[0].checked then "\\(" + text + "\\)" else "$$" + text + "$$"
 		$("#MathOutput").html html
 		MathJax.Hub.Queue(["Typeset",MathJax.Hub,"MathOutput"])
