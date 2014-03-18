@@ -1,5 +1,5 @@
 class Doc extends Spine.Model
-	@configure 'Doc', "id",  'title', 'raw_content', "u_at"
+	@configure 'Doc', "id",  'title', 'raw_content', "u_at", "draw"
 	@extend Spine.Model.Ajax
 
 	@fromJSON: (json) ->

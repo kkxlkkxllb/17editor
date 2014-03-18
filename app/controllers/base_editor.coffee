@@ -1,6 +1,9 @@
 Utils = require("lib/utils/utils")
+SketchTool = require("lib/utils/sketch_tool")
+
 class BaseEditor extends Spine.Controller
 	@include Utils
+	@include SketchTool
 	events:
 		"submit form": "onSubmit"
 		"change .scale-img": "scaleImg"
@@ -15,7 +18,13 @@ class BaseEditor extends Spine.Controller
 		"keyup .math-input": "handleMathInput"
 		"keyup .link-input": "triggerSubmit"
 		"change .inline-format": "triggerMathRender"
-		"click .paste-to-editor": "pasteToEditor"
+		# sketch
+		"click .sketch_control .color-picker": "setColor"
+		"click .sketch_control .clear": "clearSketch"
+		"click .sketch_control .eraser": "setEraser"
+		"click .sketch_control .pencil": "setPencil"
+		"click .sketch_control .download": "downloadSketch"
+		"change .sketch_control .size": "setLineWidth"
 
 	initEditor: (@$editor) ->
 		@$editor.wysiwyg
@@ -31,20 +40,8 @@ class BaseEditor extends Spine.Controller
 					$(editor).closest("form").submit()
 		@$editor.on "drop", @handleDrop
 		@$editor.on "dragover", @handleDragOver
-	initDrawBoard: (id) ->
-		options =
-			controls: [
-				'Color'
-				'Size'
-				'DrawingMode'
-				'Navigation'
-				# 'Download'
-				# 'SwitchSize'
-			]
-			size: 2
-			droppable: true
-			webStorage: false
-		@draw_board = new DrawingBoard.Board(id,options)
+	onSubmit: (e) ->
+		$("input[name='draw']",@$el).val @getSketchData()
 	preview: (e) ->
 		tof = $(e.currentTarget).hasClass("active")
 		$(".editor-mian-wrapper",@$el).toggleClass "hide",!tof
@@ -108,26 +105,18 @@ class BaseEditor extends Spine.Controller
 		@$editor.closest("form").serializeObject()
 	resetDoc: ->
 		@$editor.empty().focus()
-		@draw_board.reset(background: true) if @draw_board
+		@sketch.clear()
 	renderWithData: (data) ->
 		$form = @$editor.closest("form")
 		$.each $("input[name],textarea[name]",$form), (i,e) ->
 			key = $(e).attr "name"
 			$(e).val data[key]
 		@$editor.html(data.raw_content).focus()
+		# 如果有画板信息，则填充画板，否则清空
+		@setSketchData data.draw
+
 	handleShowModal: (e) ->
 		$(e.currentTarget).find("input[type='text']").focus()
-		if $(e.currentTarget).data("draw")
-			unless @draw_board
-				@initDrawBoard("drawing-panel")
-				$('a[title]').tooltip(container: '#drawing-panel')
-	pasteToEditor: (e) ->
-		$modal = $(e.currentTarget).closest(".modal")
-		$modal.modal "hide"
-		@$editor.focus()
-		dataUrl = @draw_board.getImg()
-		document.execCommand('insertimage', 0,dataUrl)
-		@$editor.focus()
 	triggerMathRender: ->
 		@renderMath $(".math-input",@$el).val()
 	triggerSubmit: (e) ->

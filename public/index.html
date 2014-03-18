@@ -13,7 +13,17 @@
         <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript" charset="utf-8"></script>
         <script src="./assets/application.js" type="text/javascript" charset="utf-8"></script>
     <link href="./favicon.ico" rel="shortcut icon">
-    <link href="./favicon.png" rel="apple-touch-icon-precomposed">
+    <link href="./favicon.png" rel="apple-touch-icon-precomposed"><script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45522621-4', '17up.org');
+  ga('send', 'pageview');
+
+</script>
+
   </head>
   <body>
     <header class="navbar navbar-fixed-top inav navbar-default">
@@ -31,7 +41,25 @@
         <input type="hidden" name="id">
         <div class="form-group">
           <label>标题</label>
-          <input type="text" name="title" placeholder="输入课程标题" required="required" class="form-control">
+          <input type="text" name="title" placeholder="输入标题" required="required" class="form-control">
+        </div>
+        <div class="drawing-board form-group">
+          <label>绘画板</label>
+          <input type="hidden" name="draw">
+          <div class="sketch_control btn-toolbar">
+            <div class="btn-group"><a data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span data-color="#000" class="fa fa-circle color-control-current"></span></a>
+              <div class="dropdown-menu color-control-rainbows"></div>
+            </div>
+            <div class="btn-group">
+              <div class="size-control-inner">
+                <input type="range" min="1" max="40" value="5" step="1" tabindex="-1" class="size"><span class="size-range-current"></span>
+              </div>
+            </div>
+            <div class="btn-group"><a title="Pencil" class="btn btn-default pencil active"><i class="fa fa-pencil"></i></a><a title="Eraser" class="btn btn-default eraser"><i class="fa fa-eraser"></i></a></div>
+            <div class="btn-group"><a title="Clear" class="btn btn-default clear"><i class="fa fa-times"></i></a></div>
+            <div class="btn-group"><a title="Download" class="download btn btn-default"><i class="fa fa-download"></i></a></div>
+          </div>
+          <div id="drawing-panel"></div>
         </div>
         <div data-role="editor-toolbar" data-target="#editor" class="btn-toolbar form-group">
           <input type="file" accept="image/png,image/gif,image/jpeg" data-target="pictureBtn" data-edit="insertImage" tabindex="-1" class="hidden_uploader">
@@ -68,7 +96,7 @@
           <div class="btn-group"><a data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)" class="btn btn-default"><i class="fa fa-align-left"></i></a><a data-edit="justifycenter" title="Center (Ctrl/Cmd+E)" class="btn btn-default"><i class="fa fa-align-center"></i></a><a data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)" class="btn btn-default"><i class="fa fa-align-right"></i></a><a data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)" class="btn btn-default"><i class="fa fa-align-justify"></i></a></div>
           <div class="btn-group"><a data-edit="undo" title="Undo (Ctrl/Cmd+Z)" class="btn btn-default"><i class="fa fa-undo"></i></a><a data-edit="redo" title="Redo (Ctrl/Cmd+Y)" class="btn btn-default"><i class="fa fa-repeat"></i></a></div>
           <div class="btn-group"><a title="Link" data-toggle="modal" data-target="#linkModal" class="btn btn-default"><i class="fa fa-link"></i></a><a title="unLink" data-edit="unlink" class="btn btn-default"><i class="fa fa-unlink"></i></a></div>
-          <div class="btn-group"><a id="pictureBtn" title="Insert picture" class="upload-picture btn btn-default"><i class="fa fa-picture-o"></i></a><a title="绘画板" data-toggle="modal" data-target="#drawingModal" class="btn btn-default"><i class="fa fa-pencil-square-o"></i></a><a title="公式编写" data-toggle="modal" data-target="#mathModal" class="btn btn-default"><i class="fa fa-code"></i></a></div>
+          <div class="btn-group"><a id="pictureBtn" title="Insert picture" class="upload-picture btn btn-default"><i class="fa fa-picture-o"></i></a><a title="公式编写" data-toggle="modal" data-target="#mathModal" class="btn btn-default"><i class="fa fa-code"></i></a></div>
           <div id="linkModal" class="modal fade">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -125,20 +153,6 @@
         <div class="form-group preview-panel-wrapper hide">
           <label>预览</label>
           <div id="preview-panel" class="well"></div>
-        </div>
-        <div id="drawingModal" data-draw="true" class="modal fade">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" data-dismiss="modal" class="close">&times;</button>
-                <h4 class="modal-title">绘画板</h4>
-              </div>
-              <div class="modal-body">
-                <div id="drawing-panel"></div>
-              </div>
-              <div class="modal-footer"><a class="btn btn-primary paste-to-editor"><i class="fa fa-paste"></i><span class="text">插入</span></a></div>
-            </div>
-          </div>
         </div>
       </form>
     </article>

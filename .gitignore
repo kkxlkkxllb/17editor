@@ -15,3 +15,5 @@ results
 npm-debug.log
 node_modules
 i17editor
+public/assets/application.js
+public/assets/application.css

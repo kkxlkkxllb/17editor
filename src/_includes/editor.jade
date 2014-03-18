@@ -3,7 +3,12 @@ form(role="form" method="post")
 	input(type="hidden" name="id")
 	.form-group
 		label 标题
-		input.form-control(type="text" name="title" placeholder= "输入课程标题" required="required")
+		input.form-control(type="text" name="title" placeholder= "输入标题" required="required")
+	.drawing-board.form-group
+		label 绘画板
+		input(type="hidden" name= "draw")
+		include ./sketch_control
+		#drawing-panel
 	.btn-toolbar.form-group(data-role="editor-toolbar" data-target="#editor")
 		input.hidden_uploader(type="file" accept="image/png,image/gif,image/jpeg" data-target="pictureBtn" data-edit="insertImage" tabindex=-1)
 		.btn-group
@@ -72,8 +77,6 @@ form(role="form" method="post")
 		.btn-group
 			a#pictureBtn.upload-picture.btn.btn-default(title="Insert picture")
 				i.fa.fa-picture-o
-			a.btn.btn-default(title="绘画板" data-toggle="modal" data-target="#drawingModal")
-				i.fa.fa-pencil-square-o
 			a.btn.btn-default(title="公式编写" data-toggle="modal" data-target="#mathModal")
 				i.fa.fa-code
 		#linkModal.modal.fade
@@ -121,16 +124,3 @@ form(role="form" method="post")
 	.form-group.preview-panel-wrapper.hide
 		label 预览
 		#preview-panel.well
-
-	#drawingModal.modal.fade(data-draw="true")
-		.modal-dialog
-			.modal-content
-				.modal-header
-					button.close(type="button" data-dismiss="modal" ) &times;
-					h4.modal-title 绘画板
-				.modal-body
-					#drawing-panel
-				.modal-footer
-					a.btn.btn-primary.paste-to-editor
-						i.fa.fa-paste
-						span.text 插入

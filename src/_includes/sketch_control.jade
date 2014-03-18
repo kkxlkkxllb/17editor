@@ -1,0 +1,22 @@
+.sketch_control.btn-toolbar
+	.btn-group
+		a.btn.btn-default.dropdown-toggle(data-toggle="dropdown")
+			span.fa.fa-circle.color-control-current(data-color="#333")
+		.dropdown-menu.color-control-rainbows
+	.btn-group
+		.size-control-inner
+			input.size(type="range" min="1" max="40" value="5" step="1" tabindex=-1)
+			span.size-range-current
+	.btn-group
+		a.btn.btn-default.pencil.active(title= "Pencil")
+			i.fa.fa-pencil
+		a.btn.btn-default.eraser(title=  'Eraser')
+			i.fa.fa-eraser
+
+	.btn-group
+		a.btn.btn-default.clear(title= "Clear")
+			i.fa.fa-times
+	.btn-group
+		a.download.btn.btn-default(title= "Download")
+			i.fa.fa-download
+

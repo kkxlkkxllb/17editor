@@ -14,8 +14,10 @@ class App extends BaseEditor
 		Doc.bind "ajaxError", @handleAjaxError
 		Doc.bind "serverError", @handleServerError
 		@initEditor($('#editor'))
+		@initSketch($("#drawing-panel"))
 		$('a[title]').tooltip(container: '.btn-toolbar')
 	onSubmit: (e) ->
+		super
 		e.preventDefault()
 		self = this
 		$title = $("input[name='title']",@$el)
@@ -61,10 +63,8 @@ class Nav extends Spine.Controller
 		if $(".preview",window.app.$el).hasClass "active"
 			$(".preview",window.app.$el).trigger "click"
 		$form = window.app.$el.find("form")
-		$form[0].reset()
-		$form.find("input[type='hidden']").val ""
+		$form.find("input[type='hidden'],input[type='text'],textarea").val ""
 		window.app.resetDoc()
-
 
 $ ->
 	Spine.Model.host = "http://iweb.17up.org/api"

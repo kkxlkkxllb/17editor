@@ -13,6 +13,10 @@ harp compile ./ deploy
 
 > LaTeX
 
+> Kinetic.js
+
+> Sketch.js
+
 `10^{2}`
 
 ------------------

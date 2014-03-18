@@ -32,7 +32,42 @@
 	margin 0
 #drawing-panel
 	height 300px
-	width 550px
+	width 600px
+	border 1px solid #ddd
+	cursor crosshair
+.sketch_control
+	.size-control-inner
+		width 75px
+		padding 10px 0
+		position relative
+		.size
+			z-index 10
+		.size-range-current
+			opacity 0.15
+			background #000
+			position absolute
+			pointer-events none
+			z-index 5
+			left 50%
+			top 50%
+
+	.color-control-rainbows
+		width 250px
+		padding 4px
+		overflow hidden
+		background #eee
+		.color-control-rainbow
+			height 18px
+			.color-picker
+				display inline-block
+				width 18px
+				height 18px
+				cursor pointer
+				&:hover
+					opacity 0.6
+			.color-picker:first-child
+				margin-right 5px
+
 .preview
 	.fa-eye-slash
 		display none
