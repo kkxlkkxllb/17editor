@@ -28,24 +28,79 @@ SketchTool =
 			setup: ->
 				if data = self.getLocalStorage()
 					self.setDataWith data, @
+				@lineCap = 'round'
+				@lineJoin = 'round'
 			mouseup: ->
 				 self.setLocalStorage @canvas.toDataURL("image/png")
 			# window resize bug hack
 			resize: ->
 				if data = self.getLocalStorage()
 					self.setDataWith data, @
+			touchstart: ->
+				@fillStyle = @strokeStyle = self.eraserStyle || $(".color-control-current").data("color")
 			touchmove: ->
 				if @dragging
 					touch = @touches[0]
-					@lineCap = 'round'
-					@lineJoin = 'round'
 					@lineWidth = self.sketchSize || 5
-					@fillStyle = @strokeStyle = self.strokeStyle || "#333"
 					@beginPath()
 					@moveTo touch.ox, touch.oy
 					@lineTo touch.x, touch.y
+					@closePath()
 					@stroke()
+
+		@tmp_sketch = Sketch.create
+			fullscreen: false
+			autoclear: true
+			autostart: true
+			width: 600
+			height: 300
+			container: $container[0]
+			setup: ->
+				$(@canvas).hide().css
+					"position": "absolute"
+					"top": 0
+					"left": 0
+				@lineCap = 'round'
+				@lineJoin = 'round'
+			touchstart: ->
+				@start_x = @touches[0].x
+				@start_y = @touches[0].y
+				@fillStyle = @strokeStyle = $(".color-control-current").data("color")
+			# save to really canvas
+			touchend: ->
+				self.sketch.drawImage @canvas,0,0
+				self.setLocalStorage self.sketch.canvas.toDataURL("image/png")
+			draw: ->
+				if @dragging
+					touch = @touches[0]
+					@lineWidth = self.sketchSize || 5
+					switch @graph
+						when "line"
+							@beginPath()
+							@moveTo(@start_x, @start_y)
+							@lineTo(touch.x, touch.y)
+							@stroke()
+							@closePath()
+						when "rect"
+							x = min(touch.x, @start_x)
+							y = min(touch.y, @start_y)
+							width = abs(touch.x - @start_x)
+							height = abs(touch.y - @start_y)
+							@strokeRect(x, y, width, height)
+						when "circle"
+							x = (touch.x + @start_x)/2
+							y = (touch.y + @start_y)/2
+							radius = max(abs(touch.x - @start_x),abs(touch.y - @start_y))/2
+							@beginPath()
+							@arc(x,y,radius,0,TWO_PI,false)
+							@stroke()
+							@closePath()
+
+		# drag & drop image from local
 		$(@sketch.canvas).on "dragover dragenter drop", (e) ->
+			e.stopPropagation()
+			e.preventDefault()
+		$(@tmp_sketch.canvas).on "dragover dragenter drop", (e) ->
 			e.stopPropagation()
 			e.preventDefault()
 		$(@sketch.canvas).on "drop", (e) ->
@@ -54,7 +109,7 @@ SketchTool =
 			fr = new FileReader()
 			fr.readAsDataURL(files[0])
 			fr.onload = (ev) ->
-				self.setSketchData ev.target.result
+				self.setSketchData ev.target.result, false
 	setLocalStorage: (data) ->
 		window["localStorage"].setItem "sketch-data", data
 	getLocalStorage: ->
@@ -66,8 +121,9 @@ SketchTool =
 		img.onload = ->
 			ctx.drawImage(@, 0, 0)
 		img.src = data
-	setSketchData: (data) ->
-		@sketch.clear()
+	setSketchData: (data, clear = true) ->
+		if clear
+			@sketch.clear()
 		if data
 			@setDataWith data, @sketch
 			@setLocalStorage data
@@ -82,21 +138,37 @@ SketchTool =
 	setColor: (e) ->
 		color = $(e.currentTarget).data("color")
 		$(".color-control-current").css("color": color).data("color",color)
-		$(".sketch_control .pencil").trigger "click"
 	clearSketch: (e) ->
 		@sketch.clear()
 		window["localStorage"].removeItem "sketch-data"
 	downloadSketch: (e) ->
 		data = @getSketchData().replace("image/png", "image/octet-stream")
 		window.location.href = data
-	setPencil: (e) ->
-		@sketch.globalCompositeOperation = "source-over"
-		@strokeStyle = $(".color-control-current").data("color")
-		$(e.currentTarget).addClass("active").siblings().removeClass "active"
+
 	setEraser: (e) ->
+		$(@tmp_sketch.canvas).hide()
 		@sketch.globalCompositeOperation = "copy"
-		@strokeStyle = "transparent"
+		@eraserStyle = "transparent"
 		$(e.currentTarget).addClass("active").siblings().removeClass "active"
+	commonDrawMode: (e) ->
+		@sketch.globalCompositeOperation = "source-over"
+		@eraserStyle = false
+		$(e.currentTarget).addClass("active").siblings().removeClass "active"
+	setPencil: (e) ->
+		$(@tmp_sketch.canvas).hide()
+		@commonDrawMode(e)
+	setLine: (e) ->
+		$(@tmp_sketch.canvas).show()
+		@commonDrawMode(e)
+		@tmp_sketch.graph = "line"
+	setRect: (e) ->
+		$(@tmp_sketch.canvas).show()
+		@commonDrawMode(e)
+		@tmp_sketch.graph = "rect"
+	setCircle: (e) ->
+		$(@tmp_sketch.canvas).show()
+		@commonDrawMode(e)
+		@tmp_sketch.graph = "circle"
 
 
 module?.exports = SketchTool

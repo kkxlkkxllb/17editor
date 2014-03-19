@@ -23,6 +23,9 @@ class BaseEditor extends Spine.Controller
 		"click .sketch_control .clear": "clearSketch"
 		"click .sketch_control .eraser": "setEraser"
 		"click .sketch_control .pencil": "setPencil"
+		"click .sketch_control .line": "setLine"
+		"click .sketch_control .rect": "setRect"
+		"click .sketch_control .circle": "setCircle"
 		"click .sketch_control .download": "downloadSketch"
 		"change .sketch_control .size": "setLineWidth"
 
