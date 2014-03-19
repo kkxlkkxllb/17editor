@@ -14,7 +14,7 @@ class App extends BaseEditor
 		Doc.bind "ajaxError", @handleAjaxError
 		Doc.bind "serverError", @handleServerError
 		@initEditor($('#editor'))
-		@initSketch($("#drawing-panel"))
+		@initSketch("drawing-panel")
 		$('a[title]').tooltip(container: '.btn-toolbar')
 	onSubmit: (e) ->
 		super

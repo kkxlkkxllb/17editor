@@ -1,5 +1,6 @@
 Sketch = require("lib/utils/sketch")
 Color = require("lib/utils/color")
+Kinetic = require("lib/utils/kinetic")
 
 SketchTool =
 	initColors: ->
@@ -15,9 +16,18 @@ SketchTool =
 				colors.push Color._hsl2Rgba(Color._hsl(i-60, 1, val)).toString()
 			$(".color-control-rainbows").append require("views/items/color")(colors: colors)
 
-	initSketch: ($container) ->
+	initSketch: (container) ->
 		self = this
+		$container = $("#" + container)
 		@initColors()
+
+		# canvas 1
+		@stage = new Kinetic.Stage
+			container: container
+			width: 600
+			height: 300
+
+		# canvas 2
 		@sketch = Sketch.create
 			fullscreen: false
 			autoclear: false
@@ -26,28 +36,30 @@ SketchTool =
 			height: 300
 			container: $container[0]
 			setup: ->
+				$(@canvas).css
+					"position": "absolute"
+					"top": 0
+					"left": 0
+					"z-index": 10
 				if data = self.getLocalStorage()
 					self.setDataWith data, @
-				@lineCap = 'round'
-				@lineJoin = 'round'
 			mouseup: ->
 				 self.setLocalStorage @canvas.toDataURL("image/png")
-			# window resize bug hack
-			resize: ->
-				if data = self.getLocalStorage()
-					self.setDataWith data, @
 			touchstart: ->
 				@fillStyle = @strokeStyle = self.eraserStyle || $(".color-control-current").data("color")
+				@lineCap = 'round'
+				@lineJoin = 'round'
+				@lineWidth = self.sketchSize || 5
 			touchmove: ->
 				if @dragging
 					touch = @touches[0]
-					@lineWidth = self.sketchSize || 5
 					@beginPath()
 					@moveTo touch.ox, touch.oy
 					@lineTo touch.x, touch.y
 					@closePath()
 					@stroke()
 
+		# canvas 3
 		@tmp_sketch = Sketch.create
 			fullscreen: false
 			autoclear: true
@@ -60,12 +72,14 @@ SketchTool =
 					"position": "absolute"
 					"top": 0
 					"left": 0
-				@lineCap = 'round'
-				@lineJoin = 'round'
+					"z-index": 20
 			touchstart: ->
 				@start_x = @touches[0].x
 				@start_y = @touches[0].y
+				@lineCap = 'round'
+				@lineJoin = 'round'
 				@fillStyle = @strokeStyle = $(".color-control-current").data("color")
+				@lineWidth = self.sketchSize || 5
 			# save to really canvas
 			touchend: ->
 				self.sketch.drawImage @canvas,0,0
@@ -73,7 +87,6 @@ SketchTool =
 			draw: ->
 				if @dragging
 					touch = @touches[0]
-					@lineWidth = self.sketchSize || 5
 					switch @graph
 						when "line"
 							@beginPath()
@@ -96,20 +109,49 @@ SketchTool =
 							@stroke()
 							@closePath()
 
-		# drag & drop image from local
-		$(@sketch.canvas).on "dragover dragenter drop", (e) ->
+		$container.on "dragover dragenter drop", (e) ->
 			e.stopPropagation()
 			e.preventDefault()
-		$(@tmp_sketch.canvas).on "dragover dragenter drop", (e) ->
-			e.stopPropagation()
-			e.preventDefault()
-		$(@sketch.canvas).on "drop", (e) ->
+		$container.on "drop", (e) ->
 			e = e.originalEvent
 			files = e.dataTransfer.files
 			fr = new FileReader()
 			fr.readAsDataURL(files[0])
+			img = new Kinetic.Image
+				draggable: true
+			img.on "mouseover", ->
+				$container.css "cursor": "move"
+			img.on "mouseout", ->
+				$container.css "cursor": "default"
+			img.on "mousemove", (e) ->
+				ox = @width() + @x() - e.offsetX
+				oy = @height() + @y() - e.offsetY
+				if  ox < 10 and oy < 10
+					cursor = "nwse-resize"
+					@draggable(false)
+				else
+					cursor = "move"
+					@draggable(true)
+				$container.css "cursor": cursor
+
+			# write to sketch
+			img.on "dblclick", ->
+				self.setSketchData @getCanvas().toDataURL(),false
+				@getLayer().destroy()
+				@destroy()
+				if self.stage.getChildren().length is 0
+					$(self.stage.getContent()).css "z-index": 1
+					$container.css "cursor": "crosshair"
+			layer = new Kinetic.Layer()
+			layer.add img
+			self.stage.add layer
 			fr.onload = (ev) ->
-				self.setSketchData ev.target.result, false
+				imgObj = new Image()
+				imgObj.src = ev.target.result
+				img.setImage imgObj
+				layer.draw()
+				$(self.stage.getContent()).css "z-index": 30
+
 	setLocalStorage: (data) ->
 		window["localStorage"].setItem "sketch-data", data
 	getLocalStorage: ->
