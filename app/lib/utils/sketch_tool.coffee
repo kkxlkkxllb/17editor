@@ -2,7 +2,7 @@ Sketch = require("lib/utils/sketch")
 Color = require("lib/utils/color")
 Kinetic = require("lib/utils/kinetic")
 
-SketchTool =
+ColorControl =
 	initColors: ->
 		for val in [0.75, 0.5, 0.25]
 			colors = []
@@ -16,10 +16,57 @@ SketchTool =
 				colors.push Color._hsl2Rgba(Color._hsl(i-60, 1, val)).toString()
 			$(".color-control-rainbows").append require("views/items/color")(colors: colors)
 
+KineticImage =
+	addAnchor: (group,x,y) ->
+		stage = group.getStage()
+		layer = group.getLayer()
+		img = new Image()
+		img.src = "/assets/images/resize.png"
+		img.onload = ->
+			anchor = new Kinetic.Image
+				x: x
+				y: x
+				image: img
+				name: "anchor"
+				draggable: true
+				dragBoundFunc: (pos) ->
+					max_x = group.x() + x
+					max_y = group.y() + y
+					if pos.x > max_x
+						nx = max_x
+					else if pos.x < group.x()
+						nx = group.x()
+					else
+						nx = pos.x
+					ny = (pos.x - group.x())*y/x + group.y()
+					if ny > max_y
+						ny = max_y
+					else if ny < group.y()
+						ny = group.y()
+					x: nx
+					y: ny
+
+			group.add anchor
+			tatget = group.find(".image")[0]
+			anchor.on "dragmove", (e) ->
+				dw = e.offsetX - group.x()
+				dh = (dw/x)*y
+				if dw > 0 and dw <= x
+					tatget.setSize
+						width: dw
+						height: dh
+					group.getLayer().draw()
+
+			anchor.on "mousedown touchstart", (e) ->
+				group.setDraggable(false)
+			anchor.on "dragend", ->
+				group.setDraggable(true)
+
+SketchTool =
 	initSketch: (container) ->
 		self = this
 		$container = $("#" + container)
-		@initColors()
+		ColorControl.initColors()
 
 		# canvas 1
 		@stage = new Kinetic.Stage
@@ -115,43 +162,40 @@ SketchTool =
 		$container.on "drop", (e) ->
 			e = e.originalEvent
 			files = e.dataTransfer.files
+
+			group = new Kinetic.Group
+				draggable: true
+			layer = new Kinetic.Layer()
+			img = new Kinetic.Image
+				name: "image"
+			group.add img
+			layer.add group
+			self.stage.add layer
+
 			fr = new FileReader()
 			fr.readAsDataURL(files[0])
-			img = new Kinetic.Image
-				draggable: true
-			img.on "mouseover", ->
-				$container.css "cursor": "move"
-			img.on "mouseout", ->
-				$container.css "cursor": "default"
-			img.on "mousemove", (e) ->
-				ox = @width() + @x() - e.offsetX
-				oy = @height() + @y() - e.offsetY
-				if  ox < 10 and oy < 10
-					cursor = "nwse-resize"
-					@draggable(false)
-				else
-					cursor = "move"
-					@draggable(true)
-				$container.css "cursor": cursor
-
-			# write to sketch
-			img.on "dblclick", ->
-				self.setSketchData @getCanvas().toDataURL(),false
-				@getLayer().destroy()
-				@destroy()
-				if self.stage.getChildren().length is 0
-					$(self.stage.getContent()).css "z-index": 1
-					$container.css "cursor": "crosshair"
-			layer = new Kinetic.Layer()
-			layer.add img
-			self.stage.add layer
 			fr.onload = (ev) ->
 				imgObj = new Image()
 				imgObj.src = ev.target.result
 				img.setImage imgObj
 				layer.draw()
 				$(self.stage.getContent()).css "z-index": 30
+				KineticImage.addAnchor group, img.width(), img.height()
 
+			img.on "mouseover", ->
+				$container.css "cursor": "move"
+			img.on "mouseout", ->
+				$container.css "cursor": "default"
+			# write to sketch
+			img.on "dblclick", ->
+				@getParent().find(".anchor")[0].destroy()
+				@getLayer().draw()
+				self.setSketchData @getCanvas().toDataURL(),false
+				@getLayer().destroy()
+				@destroy()
+				if self.stage.getChildren().length is 0
+					$(self.stage.getContent()).css "z-index": 1
+					$container.css "cursor": "crosshair"
 	setLocalStorage: (data) ->
 		window["localStorage"].setItem "sketch-data", data
 	getLocalStorage: ->
