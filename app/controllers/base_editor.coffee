@@ -107,14 +107,14 @@ class BaseEditor extends Spine.Controller
 		$(".brand").addClass "loading"
 		@$editor.closest("form").serializeObject()
 	resetDoc: ->
-		@$editor.empty().focus()
+		@$editor.empty()
 		@sketch.clear()
 	renderWithData: (data) ->
 		$form = @$editor.closest("form")
 		$.each $("input[name],textarea[name]",$form), (i,e) ->
 			key = $(e).attr "name"
 			$(e).val data[key]
-		@$editor.html(data.raw_content).focus()
+		@$editor.html(data.raw_content)
 		# 如果有画板信息，则填充画板，否则清空
 		@setSketchData data.draw
 

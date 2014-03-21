@@ -24,14 +24,14 @@ KineticImage =
 		img.src = "/assets/images/resize.png"
 		img.onload = ->
 			anchor = new Kinetic.Image
-				x: x
-				y: x
+				x:  (x - 8)
+				y: (y - 8)
 				image: img
 				name: "anchor"
 				draggable: true
 				dragBoundFunc: (pos) ->
-					max_x = group.x() + x
-					max_y = group.y() + y
+					max_x = group.x() + x - 8
+					max_y = group.y() + y - 8
 					if pos.x > max_x
 						nx = max_x
 					else if pos.x < group.x()
@@ -67,13 +67,13 @@ SketchTool =
 		self = this
 		$container = $("#" + container)
 		ColorControl.initColors()
-
 		# canvas 1
 		@stage = new Kinetic.Stage
 			container: container
 			width: 600
 			height: 300
 
+		$container.append require("views/widgets/pointer")()
 		# canvas 2
 		@sketch = Sketch.create
 			fullscreen: false
@@ -92,14 +92,23 @@ SketchTool =
 					self.setDataWith data, @
 			mouseup: ->
 				 self.setLocalStorage @canvas.toDataURL("image/png")
+			mouseout: ->
+				$(".pointer",$container).addClass "hide"
+			mouseover: ->
+				$(".pointer",$container).removeClass "hide"
 			touchstart: ->
 				@fillStyle = @strokeStyle = self.eraserStyle || $(".color-control-current").data("color")
 				@lineCap = 'round'
 				@lineJoin = 'round'
 				@lineWidth = self.sketchSize || 5
 			touchmove: ->
+				touch = @touches[0]
+				transform = "translateX(" + touch.ox + "px) translateY(" + touch.oy + "px)"
+				$(".pointer",$container).css
+					"transform": transform
+					"-webkit-transform": transform
+					"-ms-transform": transform
 				if @dragging
-					touch = @touches[0]
 					@beginPath()
 					@moveTo touch.ox, touch.oy
 					@lineTo touch.x, touch.y
@@ -215,12 +224,13 @@ SketchTool =
 			@setLocalStorage data
 	setLineWidth: (e) ->
 		@sketchSize = size = $(e.currentTarget).val()
-		$(e.currentTarget).next().css
+		params =
 			width: size
 			height: size
 			marginLeft: (-size/2)
 			marginTop: (-size/2)
-			borderRadius: size + "px"
+		$(e.currentTarget).next().css params
+		$(".pointer").css(params).toggleClass "invisible", size < 10
 	setColor: (e) ->
 		color = $(e.currentTarget).data("color")
 		$(".color-control-current").css("color": color).data("color",color)
